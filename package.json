@@ -1,0 +1,31 @@
+{
+  "name": "node-gpodder",
+  "version": "1.0.0",
+  "description": "A client library for gpodder",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shriram-Balaji/node-gpodder.git"
+  },
+  "keywords": [
+    "[\"gpodder\"",
+    "\"podcast\"]"
+  ],
+  "author": "Shriram Balaji",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Shriram-Balaji/node-gpodder/issues"
+  },
+  "homepage": "https://github.com/Shriram-Balaji/node-gpodder#readme",
+  "devDependencies": {
+    "ava": "1.0.0-beta.4",
+    "prettier": "^1.12.1",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "util-box": "^1.0.4"
+  }
+}
