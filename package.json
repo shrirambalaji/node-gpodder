@@ -14,6 +14,9 @@
     "[\"gpodder\"",
     "\"podcast\"]"
   ],
+  "ava": {
+    "files": "test/**/*.js"
+  },
   "author": "Shriram Balaji",
   "license": "GPL-3.0",
   "bugs": {
@@ -28,10 +31,8 @@
     "prettier": "^1.12.1",
     "supertest": "^3.0.0"
   },
-  "babel" : {
-
-  },
   "dependencies": {
+    "node-fetch": "^2.1.2",
     "util-box": "^1.0.4"
   }
 }
