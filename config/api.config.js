@@ -1,8 +1,6 @@
-const config = {};
-config.api = {
+module.exports = {
 	base: "https://gpodder.net",
 	mountpoints: {
 		subscriptions: "/subscriptions"
 	}
 };
-module.exports = config;
