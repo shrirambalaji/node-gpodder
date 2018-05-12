@@ -5,6 +5,10 @@ const test = require('ava');
 const SimpleClient = require(path.join(SRCDIR, "client", "simple-client"))
 
 test("client can be initialised", t => {
-	const sc = new SimpleClient("hello", "hi", "somehost")
+	t.plan(4);
+	const sc = new SimpleClient("hello", "password", "somehost")
 	t.is(sc.username, "hello");
+	t.is(sc.password, "password");
+	t.is(sc.host, "somehost");
+	t.is(sc.hasCredentials, true);
 });
