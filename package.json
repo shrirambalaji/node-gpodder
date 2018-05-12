@@ -25,13 +25,11 @@
   "homepage": "https://github.com/Shriram-Balaji/node-gpodder#readme",
   "devDependencies": {
     "ava": "1.0.0-beta.4",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.26.0",
     "prettier": "^1.12.1",
     "supertest": "^3.0.0"
   },
   "dependencies": {
+    "bluebird": "^3.5.1",
     "node-fetch": "^2.1.2",
     "util-box": "^1.0.4"
   }
