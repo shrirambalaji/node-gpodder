@@ -50,7 +50,7 @@ class Locator {
 	 * This is used to return a url-encoded query strign
 	 */
 	_urlEncodeString(query) {
-		return encodeURI(query);
+		return encodeURIComponent(query);
 	}
 
 	/**
@@ -157,8 +157,6 @@ class Locator {
 		if (deviceId && podcast) {
 			return new Error("Must not specify both 'podcast' and 'deviceId'");
 		} else {
-			if (podcast)
-				podcast = this._urlEncodeString(podcast);
 			since = this._normalizeSince(since);
 			let opts = {
 				since: since,
@@ -206,7 +204,6 @@ class Locator {
 	 * @param {string} podcast - a valid podcast url
 	 */
 	podcastDataUri(podcast) {
-		podcast = this._urlEncodeString(podcast);
 		let opts = {
 			url: podcast
 		};
@@ -219,10 +216,6 @@ class Locator {
 	 * @param {string} episode - a valid episode url
 	 */
 	episodeDataUri(podcast, episode) {
-		if (podcast)
-			podcast = this._urlEncodeString(podcast);
-		if (episode)
-			episode = this._urlEncodeString(episode);
 		let opts = {
 			podcast: podcast,
 			url: episode
@@ -247,18 +240,17 @@ class Locator {
 			return new Error("Unsupported Setting Type");
 		else {
 			let settingsUri = `${this._getBaseUri("settings", true)}/${this._username}/${type}.json`
-			let deviceName = null;
-			let podcastUrl = null;
-			let episodeUrl = null;
 			switch (type) {
 				case "account":
 					return settingsUri;
 					break;
 
 				case "device":
-					deviceName = params[0];
+					let deviceName = params[0];
 					if (!deviceName)
 						return new Error("Device Name is not specified");
+					else
+						return `${settingsUri}${httpUtil.makeQueryString({device: deviceName})}`;
 					break;
 
 				case "podcast":
@@ -269,14 +261,15 @@ class Locator {
 						return `${settingsUri}${httpUtil.makeQueryString({podcast: podcastUrl})}`;
 					break;
 
+
 				case "episode":
-					podcastUrl = params[0];
-					episodeUrl = params[1];
-					if (!podcastUrl || !episodeUrl)
+					let podcast = params[0];
+					let episode = params[1];
+					if (!podcast || !episode)
 						return new Error("Podcast or Episode Url is not specified");
 					else
-						return `${settingsUri}${httpUtil.makeQueryString({podcast: podcastUrl, episode: episodeUrl})}`;
-
+						return `${settingsUri}${httpUtil.makeQueryString({podcast: podcast, episode: episode})}`;
+					break;
 			}
 		}
 	}
