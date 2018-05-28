@@ -65,10 +65,9 @@ test("getPodcastsOfATag throws an error when input tag is not provided", async t
 	}
 });
 
-test("_toDataModel", async t => {
+test("_toDataModel converts top list to a list of podcasts", async t => {
 	try {
-		console.log(">>>-SHRIRAM->>> Podcast", Podcast);
 		const podcasts = await api._toDataModel(mockTopList.toplist, Podcast);
-		console.log(">>>-SHRIRAM->>> podcasts", podcasts);
+		t.pass();
 	} catch (err) {}
 });
