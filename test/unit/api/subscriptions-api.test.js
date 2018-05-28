@@ -11,7 +11,6 @@ test.before(t => {
 });
 
 test("GET /subscriptions throws an Unauthenticated Error when credentials are wrong", async t => {
-	t.plan(1);
 	let testDeviceId = "testDeviceId";
 	try {
 		const subs = await Subscriptions.get(client, testDeviceId, "json");
@@ -21,7 +20,6 @@ test("GET /subscriptions throws an Unauthenticated Error when credentials are wr
 });
 
 test("GET /subscriptions throws an error when deviceId is null", async t => {
-	t.plan(1);
 	try {
 		const subs = await Subscriptions.get(client, null, "json");
 	} catch (e) {
@@ -30,7 +28,6 @@ test("GET /subscriptions throws an error when deviceId is null", async t => {
 });
 
 test("GET /subscriptions throws an error when subscription format is unsupported", async t => {
-	t.plan(1);
 	try {
 		const subs = await Subscriptions.get(client, "deviceid", "oops");
 	} catch (e) {
