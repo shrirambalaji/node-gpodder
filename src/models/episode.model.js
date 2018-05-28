@@ -1,10 +1,7 @@
 /**
  * Container Class for Episodes
  */
-
 class Episode {
-	REQUIRED_FIELDS = ["title", "url", "podcastTitle", "podcastUrl", "description", "website", "released", "mygpoLink"];
-
 	constructor(title, url, podcastTitle, podcastUrl, description, website, released, mygpoLink) {
 		this.title = title;
 		this.url = url;
@@ -16,9 +13,22 @@ class Episode {
 		this.mygpoLink = mygpoLink;
 	}
 
-	static getRequiredFields = function() {
-		return REQUIRED_FIELDS;
-	};
+	static getName() {
+		return "Episode";
+	}
+
+	static getRequiredFields() {
+		return [
+			"title",
+			"url",
+			"podcastTitle",
+			"podcastUrl",
+			"description",
+			"website",
+			"released",
+			"mygpoLink"
+		];
+	}
 }
 
 module.exports = Episode;

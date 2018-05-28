@@ -9,28 +9,53 @@
 const path = require("path");
 const fetch = require("node-fetch");
 const Promise = require("bluebird");
+const toCamelCase = require("camelcase-keys");
+const objectAssign = require("object-assign");
 const { error, success, debug, httpUtil } = require("util-box");
 const HOMEDIR = path.join(__dirname, "..", "..");
 const SRCDIR = path.join(HOMEDIR, "src");
-const Locator = require(path.join(SRCDIR, "util", "locator.util"));
 const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
 const CONSTANTS = apiConfiguration.constants;
-
+const Locator = require(path.join(SRCDIR, "util", "locator.util"));
+const { Podcast, Episode, Tag } = require(path.join(SRCDIR, "models"));
 class PublicApi {
 	constructor() {
 		const locator = new Locator();
 		this._locator = locator;
 	}
+
+	/**
+	 * Converts snake_case JSON array into a camelCased object of specified model
+	 * @param {array} input - JSON array from gpodder.net web service
+	 * @param {model} model - output model to convert the array into
+	 */
+	_toDataModel(input, model) {
+		let output = {};
+		input = toCamelCase(input);
+		return new Promise((resolve, reject) => {
+			input.map((x, index) => {
+				model.getRequiredFields().map(key => {
+					if (!x.hasOwnProperty(key)) {
+						reject(new Error(`Missing required keys for ${model.getName()}`));
+					}
+				});
+				let dataModel = objectAssign(new model(), x);
+				output[index] = dataModel;
+			});
+			resolve(output);
+		});
+	}
+
 	/**
 	 * Get a list of most-subscribed podcasts of a Tag
 	 * @param {number} count - (optional) number of podcasts returned. Default = 50. Range = 1 (minimum) to 100 (maximum)
-	 * @returns {array} - an array of podcast objects
+	 * @returns {object} - a list of podcast objects
 	 */
 	getTopList(count = CONSTANTS.TOPLIST_DEFAULT) {
 		return new Promise((resolve, reject) => {
 			fetch(this._locator.toplistUri(count, CONSTANTS.FORMAT_DEFAULT))
 				.then(response => httpUtil.handleApiResponse(response))
-				.then(podcastArray => resolve(podcastArray))
+				.then(podcastArray => resolve(this._toDataModel(podcastArray, Podcast)))
 				.catch(err => reject(err));
 		});
 	}
@@ -47,7 +72,7 @@ class PublicApi {
 			} else {
 				fetch(this._locator.searchUri(query, CONSTANTS.FORMAT_DEFAULT))
 					.then(response => httpUtil.handleApiResponse(response))
-					.then(podcastArray => resolve(podcastArray))
+					.then(podcastArray => resolve(this._toDataModel(podcastArray, Podcast)))
 					.catch(err => reject(err));
 			}
 		});
@@ -65,7 +90,7 @@ class PublicApi {
 			} else {
 				fetch(this._locator.podcastsOfATagUri(tag, count))
 					.then(response => httpUtil.handleApiResponse(response))
-					.then(podcastArray => resolve(podcastArray))
+					.then(podcastArray => resolve(this._toDataModel(podcastArray, Podcast)))
 					.catch(err => reject(err));
 			}
 		});
@@ -83,7 +108,7 @@ class PublicApi {
 			} else {
 				fetch(this._locator.getPodcastData(podcastUri))
 					.then(response => httpUtil.handleApiResponse(response))
-					.then(podcast => resolve(podcast))
+					.then(podcast => resolve(this._toDataModel(podcast, Podcast)))
 					.catch(err => reject(err));
 			}
 		});
@@ -96,7 +121,7 @@ class PublicApi {
 			} else {
 				fetch(this._locator.getEpisodeData(podcastUri, episodeUri))
 					.then(response => httpUtil.handleApiResponse(response))
-					.then(podcast => resolve(podcast))
+					.then(podcast => resolve(this._toDataModel(podcast, Podcast)))
 					.catch(err => reject(err));
 			}
 		});

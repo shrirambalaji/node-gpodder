@@ -3,8 +3,6 @@
  */
 
 class Tag {
-	REQUIRED_FIELDS = ["tag", "usage"];
-
 	/**
 	 *
 	 * @param {string} tag -  name of the tag
@@ -15,7 +13,13 @@ class Tag {
 		this.usage = usage;
 	}
 
-	static getRequiredFields = function() {
-		return REQUIRED_FIELDS;
-	};
+	static getName() {
+		return "Tag";
+	}
+
+	static getRequiredFields() {
+		return ["tag", "usage"];
+	}
 }
+
+module.exports = Tag;

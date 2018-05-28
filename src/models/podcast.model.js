@@ -5,18 +5,16 @@
  * @param {string} description - The description of the podcast
  */
 class Podcast {
-	REQUIRED_FIELDS = [
-		"url",
-		"title",
-		"description",
-		"website",
-		"subscribers",
-		"subscribersLastWeek",
-		"mygpoLink",
-		"logoUrl"
-	];
-
-	constructor(url, title, description, website, subscribers, subscribersLastWeek, mygpoLink, logoUrl) {
+	constructor(
+		url,
+		title,
+		description,
+		website,
+		subscribers,
+		subscribersLastWeek,
+		mygpoLink,
+		logoUrl
+	) {
 		this.url = url;
 		this.title = title;
 		this.description = description;
@@ -27,7 +25,22 @@ class Podcast {
 		this.logoUrl = logoUrl;
 	}
 
-	static getRequiredKeys = function() {
-		return REQUIRED_FIELDS;
-	};
+	static getName() {
+		return "Podcast";
+	}
+
+	static getRequiredFields() {
+		return [
+			"url",
+			"title",
+			"description",
+			"website",
+			"subscribers",
+			"subscribersLastWeek",
+			"mygpoLink",
+			"logoUrl"
+		];
+	}
 }
+
+module.exports = Podcast;
