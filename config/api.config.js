@@ -13,5 +13,9 @@ module.exports = {
 		settings: "/settings",
 		episodes: "/episodes"
 	},
+	constants: {
+		TOPLIST_DEFAULT: 50,
+		FORMAT_DEFAULT: "json"
+	},
 	version: "2"
 };
