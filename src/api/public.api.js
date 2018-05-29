@@ -17,7 +17,7 @@ const SRCDIR = path.join(HOMEDIR, "src");
 const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
 const CONSTANTS = apiConfiguration.constants;
 const Locator = require(path.join(SRCDIR, "util", "locator.util"));
-const { Podcast, Episode, Tag } = require(path.join(SRCDIR, "models"));
+const Podcast = require(path.join(SRCDIR, "models")).Podcast;
 class PublicApi {
 	constructor() {
 		const locator = new Locator();
@@ -128,4 +128,4 @@ class PublicApi {
 	}
 }
 
-module.exports = PublicApi;
+module.exports = new PublicApi();

@@ -3,18 +3,13 @@ const test = require("ava");
 const HOMEDIR = path.join(__dirname, "..", "..", "..");
 const SRCDIR = path.join(HOMEDIR, "src");
 const SimpleClient = require(path.join(SRCDIR, "client", "simple-client"));
-const { PublicApi } = require(path.join(SRCDIR, "api"));
-const { Podcast } = require(path.join(SRCDIR, "models"));
+const PublicApi = require(path.join(SRCDIR, "api")).PublicApi;
+const Podcast = require(path.join(SRCDIR, "models")).PodcastModel;
 const mockTopList = require("../../fixtures/toplist.json");
-
-let api = null;
-test.before(t => {
-	api = new PublicApi();
-});
 
 test("toplist returns an array of podcasts", async t => {
 	try {
-		const toptags = await api.getTopList(10);
+		const toptags = await PublicApi.getTopList(10);
 		t.is(Object.keys(toptags).length, 10);
 		t.truthy(toptags[0].title);
 		t.truthy(toptags[0].description);
@@ -30,7 +25,7 @@ test("toplist returns an array of podcasts", async t => {
 
 test("searchPodcasts returns podcast results based on the input search query", async t => {
 	try {
-		const searchResults = await api.searchPodcasts("hello");
+		const searchResults = await PublicApi.searchPodcasts("hello");
 		t.truthy(searchResults);
 	} catch (err) {
 		t.falsy(err);
@@ -39,7 +34,7 @@ test("searchPodcasts returns podcast results based on the input search query", a
 
 test("searchPodcasts throws an error when input query is not provided", async t => {
 	try {
-		const searchResults = await api.searchPodcasts();
+		const searchResults = await PublicApi.searchPodcasts();
 	} catch (err) {
 		t.truthy(err);
 		t.is(err.message, "Missing or invalid parameters: query");
@@ -48,7 +43,7 @@ test("searchPodcasts throws an error when input query is not provided", async t 
 
 test("getPodcastsOfATag returns podcasts of specified tag", async t => {
 	try {
-		const podcasts = await api.getPodcastsOfATag("javascript", 20);
+		const podcasts = await PublicApi.getPodcastsOfATag("javascript", 20);
 		t.truthy(podcasts);
 		t.is(Object.keys(podcasts).length, 20);
 	} catch (err) {
@@ -58,16 +53,16 @@ test("getPodcastsOfATag returns podcasts of specified tag", async t => {
 
 test("getPodcastsOfATag throws an error when input tag is not provided", async t => {
 	try {
-		const podcasts = await api.getPodcastsOfATag();
+		const podcasts = await PublicApi.getPodcastsOfATag();
 	} catch (err) {
 		t.truthy(err);
 		t.is(err.message, "Missing or invalid parameters: tag");
 	}
 });
 
-test("_toDataModel converts top list to a list of podcasts", async t => {
+test("_toDataModel converts GET /toplist to a list of podcasts", async t => {
 	try {
-		const podcasts = await api._toDataModel(mockTopList.toplist, Podcast);
+		const podcasts = await PublicApi._toDataModel(mockTopList.toplist, Podcast);
 		t.pass();
 	} catch (err) {}
 });
