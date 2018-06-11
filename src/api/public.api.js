@@ -33,16 +33,19 @@ class PublicApi {
 		let output = {};
 		input = toCamelCase(input);
 		return new Promise((resolve, reject) => {
-			input.map((x, index) => {
-				model.getRequiredFields().map(key => {
-					if (!x.hasOwnProperty(key)) {
-						reject(new Error(`Missing required keys for ${model.getName()}`));
-					}
+			if (Array.isArray(input) && input.length > 0) {
+				input.map((x, index) => {
+					model.getRequiredFields().map(key => {
+						if (!x.hasOwnProperty(key)) {
+							reject(new Error(`Missing required keys for ${model.getName()}`));
+						}
+					});
+					let dataModel = objectAssign(new model(), x);
+					output[index] = dataModel;
 				});
-				let dataModel = objectAssign(new model(), x);
-				output[index] = dataModel;
-			});
-			resolve(output);
+				resolve(output);
+			}
+			resolve(input);
 		});
 	}
 
@@ -106,7 +109,7 @@ class PublicApi {
 			if (!podcastUri) {
 				reject(new Error("Missing or invalid parameters: podcastUri"));
 			} else {
-				fetch(this._locator.getPodcastData(podcastUri))
+				fetch(this._locator.podcastDataUri(podcastUri))
 					.then(response => httpUtil.handleApiResponse(response))
 					.then(podcast => resolve(this._toDataModel(podcast, Podcast)))
 					.catch(err => reject(err));
@@ -117,9 +120,9 @@ class PublicApi {
 	getEpisodeData(podcastUri, episodeUri) {
 		return new Promise((resolve, reject) => {
 			if (!podcastUri || !episodeUri) {
-				reject("Missing or invalid parameters: podcastUri, episodeUri");
+				reject(new Error("Missing or invalid parameters: podcastUri, episodeUri"));
 			} else {
-				fetch(this._locator.getEpisodeData(podcastUri, episodeUri))
+				fetch(this._locator.episodeDataUri(podcastUri, episodeUri))
 					.then(response => httpUtil.handleApiResponse(response))
 					.then(podcast => resolve(this._toDataModel(podcast, Podcast)))
 					.catch(err => reject(err));
