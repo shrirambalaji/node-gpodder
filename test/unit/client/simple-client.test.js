@@ -10,7 +10,7 @@ test("client can be initialised", t => {
 	t.is(sc.username, "hello");
 	t.is(sc.password, "password");
 	t.is(sc.host, "somehost");
-	t.is(sc.hasCredentials(), true);
+	t.is(sc._hasCredentials(), true);
 });
 
 test("client can get subscriptions", async t => {

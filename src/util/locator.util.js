@@ -1,12 +1,9 @@
 const path = require("path");
 const HOMEDIR = path.join(__dirname, "..", "..");
-const {
-	httpUtil
-} = require("util-box");
+const { httpUtil } = require("util-box");
 const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
-
-const SIMPLE_FORMATS = ['opml', 'json', 'txt'];
-const SETTINGS_TYPES = ['account', 'device', 'podcast', 'episode'];
+const SIMPLE_FORMATS = ["opml", "json", "txt"];
+const SETTINGS_TYPES = ["account", "device", "podcast", "episode"];
 
 /**
  * This helper class abstracts the URIs for the gpodder.net
@@ -30,7 +27,7 @@ class Locator {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {string} format - input string to convert to
 	 * This is used to normalize a dot-suffixed input format
 	 */
@@ -45,7 +42,7 @@ class Locator {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {string} query  - input query to encode
 	 * This is used to return a url-encoded query strign
 	 */
@@ -55,7 +52,7 @@ class Locator {
 
 	/**
 	 * Converts since into a numeric value
-	 * @param {string} since 
+	 * @param {string} since
 	 * @returns {number}
 	 */
 	_normalizeSince(since) {
@@ -66,7 +63,7 @@ class Locator {
 	}
 	/**
 	 *  This is used to fetch the base uri of gpodder.net web service from api configuration
-	 * @param {string} endpoint  - the gpodder endpoint 
+	 * @param {string} endpoint  - the gpodder endpoint
 	 * @param {boolean} is_advanced - whether or not to fetch Advanced Api Client Endpoints
 	 */
 	_getBaseUri(endpoint, is_advanced = false) {
@@ -75,14 +72,12 @@ class Locator {
 		if (endpoint) {
 			let apiEndpoint = `${apiConfiguration.endpoints[endpoint]}`;
 			if (is_advanced) {
-				apiEndpoint = this._prefixString(apiEndpoint, versionString)
+				apiEndpoint = this._prefixString(apiEndpoint, versionString);
 			}
-			apiEndpoint = this._prefixString(apiEndpoint, base)
+			apiEndpoint = this._prefixString(apiEndpoint, base);
 			return apiEndpoint;
-		} else
-			return base;
+		} else return base;
 	}
-
 
 	/**
 	 * Get the Simple API URI for a subscription list
@@ -90,12 +85,14 @@ class Locator {
 	 * @param {string} format - valid output format
 	 */
 	subscriptionsUri(deviceId, format = "opml") {
-		return `${this._getBaseUri("subscriptions")}/${this._username}/${deviceId}.${this._normalizeFormat(format)}`;
+		return `${this._getBaseUri("subscriptions")}/${
+			this._username
+		}/${deviceId}.${this._normalizeFormat(format)}`;
 	}
 
 	/**
 	 * Get the Simple API URI for the toplist
-	 * @param {number} count 
+	 * @param {number} count
 	 * @param {string} format - valid output format
 	 */
 	toplistUri(count = 50, format = "opml") {
@@ -118,11 +115,13 @@ class Locator {
 	 */
 	searchUri(query, format = "opml") {
 		query = this._urlEncodeString(query);
-		return `${this._getBaseUri("search")}.${this._normalizeFormat(format)}${httpUtil.makeQueryString({q: query})}`;
+		return `${this._getBaseUri("search")}.${this._normalizeFormat(
+			format
+		)}${httpUtil.makeQueryString({ q: query })}`;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {string} deviceId - unique device identifier
 	 */
 	addRemoveSubscriptionsUri(deviceId) {
@@ -136,7 +135,11 @@ class Locator {
 	 */
 	subscriptionUpdatesUri(deviceId, since = null) {
 		since = this._normalizeSince(since);
-		return `${this._getBaseUri("subscriptions", true)}/${this._username}/${deviceId}.json${httpUtil.makeQueryString({since: since})}`;
+		return `${this._getBaseUri("subscriptions", true)}/${
+			this._username
+		}/${deviceId}.json${httpUtil.makeQueryString({
+			since: since
+		})}`;
 	}
 
 	/**
@@ -161,9 +164,11 @@ class Locator {
 			let opts = {
 				since: since,
 				podcast: podcast,
-				device: deviceId,
+				device: deviceId
 			};
-			return `${this._getBaseUri("episodes", true)}/${this._username}.json${httpUtil.makeQueryString(opts)}`;
+			return `${this._getBaseUri("episodes", true)}/${
+				this._username
+			}.json${httpUtil.makeQueryString(opts)}`;
 		}
 	}
 
@@ -183,7 +188,7 @@ class Locator {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {number} count - (optional, defaults to 50) max. number of results to retrieve
 	 */
 	toptagsUri(count = 50) {
@@ -219,7 +224,7 @@ class Locator {
 		let opts = {
 			podcast: podcast,
 			url: episode
-		}
+		};
 		return `${this._getBaseUri("data", true)}/episode.json${httpUtil.makeQueryString(opts)}`;
 	}
 
@@ -236,10 +241,9 @@ class Locator {
 	 * @param {Array} params - input parameters that differ based on each setting type.
 	 */
 	settingsUri(type, ...params) {
-		if (!SETTINGS_TYPES.includes(type))
-			return new Error("Unsupported Setting Type");
+		if (!SETTINGS_TYPES.includes(type)) return new Error("Unsupported Setting Type");
 		else {
-			let settingsUri = `${this._getBaseUri("settings", true)}/${this._username}/${type}.json`
+			let settingsUri = `${this._getBaseUri("settings", true)}/${this._username}/${type}.json`;
 			switch (type) {
 				case "account":
 					return settingsUri;
@@ -247,28 +251,25 @@ class Locator {
 
 				case "device":
 					let deviceName = params[0];
-					if (!deviceName)
-						return new Error("Device Name is not specified");
-					else
-						return `${settingsUri}${httpUtil.makeQueryString({device: deviceName})}`;
+					if (!deviceName) return new Error("Device Name is not specified");
+					else return `${settingsUri}${httpUtil.makeQueryString({ device: deviceName })}`;
 					break;
 
 				case "podcast":
 					let podcastUrl = params[0];
-					if (!podcastUrl)
-						return new Error("Podcast Url is not specified");
-					else
-						return `${settingsUri}${httpUtil.makeQueryString({podcast: podcastUrl})}`;
+					if (!podcastUrl) return new Error("Podcast Url is not specified");
+					else return `${settingsUri}${httpUtil.makeQueryString({ podcast: podcastUrl })}`;
 					break;
-
 
 				case "episode":
 					let podcast = params[0];
 					let episode = params[1];
-					if (!podcast || !episode)
-						return new Error("Podcast or Episode Url is not specified");
+					if (!podcast || !episode) return new Error("Podcast or Episode Url is not specified");
 					else
-						return `${settingsUri}${httpUtil.makeQueryString({podcast: podcast, episode: episode})}`;
+						return `${settingsUri}${httpUtil.makeQueryString({
+							podcast: podcast,
+							episode: episode
+						})}`;
 					break;
 			}
 		}
@@ -278,8 +279,8 @@ class Locator {
 	 *  Get the server's root URI.
 	 */
 	rootUri() {
-		return `${this._getBaseUri()}`
+		return `${this._getBaseUri()}`;
 	}
 }
 
-module.exports = Locator
+module.exports = Locator;

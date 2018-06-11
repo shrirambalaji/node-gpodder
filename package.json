@@ -24,13 +24,16 @@
   },
   "homepage": "https://github.com/Shriram-Balaji/node-gpodder#readme",
   "devDependencies": {
-    "ava": "1.0.0-beta.4",
+    "ava": "^1.0.0-beta.4",
     "prettier": "^1.12.1",
     "supertest": "^3.0.0"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
+    "camelcase-keys": "^4.2.0",
+    "json_": "^2.0.0",
     "node-fetch": "^2.1.2",
+    "object-assign": "^4.1.1",
     "util-box": "^1.0.4"
   }
 }
