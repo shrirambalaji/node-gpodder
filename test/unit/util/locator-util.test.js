@@ -37,7 +37,6 @@ test("locator._getBaseUri return advanced api url", t => {
 	t.is(locator._getBaseUri("subscriptions", true), "https://gpodder.net/api/2/subscriptions");
 });
 
-
 test("locator.subscriptionsUri returns subscription Uri", t => {
 	const uri = locator.subscriptionsUri("deviceId", "json");
 	t.is(uri, "https://gpodder.net/subscriptions/username/deviceId.json");
@@ -95,7 +94,7 @@ test("locator.toptagsUri retuns top tags uri", t => {
 });
 
 test("locator.podcastsOfATagUri returns podcasts of a particular tag uri", t => {
-	t.is(locator.podcastsOfATagUri("hello", 100), "https://gpodder.net/api/2/tag/hello/100.json")
+	t.is(locator.podcastsOfATagUri("hello", 100), "https://gpodder.net/api/2/tag/hello/100.json");
 });
 
 test("locator.podcastDataUri returns valid podcast data uri", t => {
@@ -105,7 +104,10 @@ test("locator.podcastDataUri returns valid podcast data uri", t => {
 
 test("locator.episodeDataUri returns valid episode data uri", t => {
 	const episodeData = locator.episodeDataUri("https://random.podcast.com", "https://random.episode.com");
-	t.is(episodeData, "https://gpodder.net/api/2/data/episode.json?podcast=https://random.podcast.com&url=https://random.episode.com");
+	t.is(
+		episodeData,
+		"https://gpodder.net/api/2/data/episode.json?podcast=https://random.podcast.com&url=https://random.episode.com"
+	);
 });
 
 test("locator.favoriteEpisodesUri returns favorite episodes uri", t => {
@@ -113,9 +115,9 @@ test("locator.favoriteEpisodesUri returns favorite episodes uri", t => {
 });
 
 test("locator.settingsUri returns an error if an invalid type is specified", t => {
-	const err = locator.settingsUri('wrong-type');
-	t.is(err.message, 'Unsupported Setting Type');
-})
+	const err = locator.settingsUri("wrong-type");
+	t.is(err.message, "Unsupported Setting Type");
+});
 
 test("locator.settingsUri returns a valid `account` setting uri", t => {
 	const account = locator.settingsUri("account");
@@ -124,7 +126,7 @@ test("locator.settingsUri returns a valid `account` setting uri", t => {
 
 test("locator.settingsUri returns a valid `device` setting uri", t => {
 	const device = locator.settingsUri("device", "iphone");
-	t.is(device, "https://gpodder.net/api/2/settings/username/device.json?device=iphone")
+	t.is(device, "https://gpodder.net/api/2/settings/username/device.json?device=iphone");
 });
 
 test("locator.settingsUri returns a error for `device` setting uri", t => {
@@ -144,7 +146,10 @@ test("locator.settingsUri returns a error for `podcast` setting uri", t => {
 
 test("locator.settingsUri returns a valid `episode` setting uri", t => {
 	const episode = locator.settingsUri("episode", "https://random.podcast.com", "https://random.episode.com");
-	t.is(episode, "https://gpodder.net/api/2/settings/username/episode.json?podcast=https://random.podcast.com&episode=https://random.episode.com");
+	t.is(
+		episode,
+		"https://gpodder.net/api/2/settings/username/episode.json?podcast=https://random.podcast.com&episode=https://random.episode.com"
+	);
 });
 
 test("locator.settingsUri returns a error for `episode` setting uri", t => {
