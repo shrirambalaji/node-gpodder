@@ -1,6 +1,6 @@
 {
   "name": "node-gpodder",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "A client library for gpodder",
   "main": "src/index.js",
   "scripts": {
