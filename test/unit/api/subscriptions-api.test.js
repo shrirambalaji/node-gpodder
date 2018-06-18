@@ -15,7 +15,7 @@ test("GET /subscriptions throws an Unauthenticated Error when credentials are wr
 	try {
 		const subs = await SubscriptionsApi.get(client, testDeviceId, "json");
 	} catch (e) {
-		t.is(e.message, "Expected 2xx, found 400");
+		t.is(e.message, "Expected 2xx, found 401");
 	}
 });
 
@@ -31,6 +31,7 @@ test("GET /subscriptions returns subscriptions", async t => {
 	let testDeviceId = "123456";
 	try {
 		const subs = await SubscriptionsApi.get(new SimpleClient("node-gpodder", "node@123"), null, "json");
+		t.truthy(subs);
 	} catch (e) {
 		t.falsy(e);
 	}

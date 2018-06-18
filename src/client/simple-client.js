@@ -1,4 +1,5 @@
 const path = require("path");
+const B64Encode = require("base-64").encode;
 const HOMEDIR = path.join(__dirname, "..", "..");
 const SRCDIR = path.join(HOMEDIR, "src");
 const config = require(path.join(HOMEDIR, "config", "api.config"));
@@ -29,6 +30,18 @@ class SimpleClient {
 	_hasCredentials() {
 		if (this.username && this.password) return true;
 		else return false;
+	}
+
+	/**
+	 * internal method used to add Basic HTTP Authentication to the request
+	 * @param {*} options - input request options
+	 */
+	_authorizeRequest(options) {
+		if (!options) options = {};
+		if (!options.headers) options.headers = {};
+		const encodedCredentials = B64Encode(`${this.username}:${this.password}`);
+		options.headers["Authorization"] = `Basic ${encodedCredentials}`;
+		return options;
 	}
 
 	/**

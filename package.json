@@ -29,7 +29,7 @@
     "supertest": "^3.0.0"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "base-64": "^0.1.0",
     "bluebird": "^3.5.1",
     "camelcase-keys": "^4.2.0",
     "json_": "^2.0.0",

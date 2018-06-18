@@ -14,23 +14,25 @@ class SubscriptionsApi {
 				reject(new Error("Missing or invalid client credentials"));
 			} else {
 				if (!SIMPLE_FORMATS.includes(format)) {
-					reject(new Error(`Unsupported Subscription Format: ${format}`));
+					const e = new Error(`Unsupported Subscription Format: ${format}`);
+					error(e);
+					reject(e);
 				}
 				const locator = new Locator(client.username);
+
 				// initialize locator with username and host
-				let params = {
-					method: "GET",
-					headers: {
-						Authorization: `Basic ${client.username}:${client.password}`
-					}
-				};
-				let uri = locator.subscriptionsUri(deviceId, format);
+				let params = client._authorizeRequest({ method: "GET" });
+				const uri = locator.subscriptionsUri(deviceId, format);
+				debug("Request: ", uri, "with options: ", params);
 				fetch(uri, params)
 					.then(response => httpUtil.handleApiResponse(response))
 					.then(json => {
 						resolve(json);
 					})
-					.catch(err => reject(err));
+					.catch(e => {
+						error(e);
+						reject(e);
+					});
 			}
 		});
 	}
