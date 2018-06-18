@@ -7,7 +7,7 @@ const SubscriptionsApi = require(path.join(SRCDIR, "api")).SubscriptionsApi;
 let client = null;
 
 test.before(t => {
-	client = new SimpleClient("shriram_balaji", "password", "host");
+	client = new SimpleClient("test", "password");
 });
 
 test("GET /subscriptions throws an Unauthenticated Error when credentials are wrong", async t => {
@@ -15,15 +15,7 @@ test("GET /subscriptions throws an Unauthenticated Error when credentials are wr
 	try {
 		const subs = await SubscriptionsApi.get(client, testDeviceId, "json");
 	} catch (e) {
-		t.is(e.message, "Expected 2xx, found 401");
-	}
-});
-
-test("GET /subscriptions throws an error when deviceId is null", async t => {
-	try {
-		const subs = await SubscriptionsApi.get(client, null, "json");
-	} catch (e) {
-		t.is(e.message, "Missing or invalid parameters: deviceId");
+		t.is(e.message, "Expected 2xx, found 400");
 	}
 });
 
@@ -32,5 +24,14 @@ test("GET /subscriptions throws an error when subscription format is unsupported
 		const subs = await SubscriptionsApi.get(client, "deviceid", "oops");
 	} catch (e) {
 		t.is(e.message, "Unsupported Subscription Format: oops");
+	}
+});
+
+test("GET /subscriptions returns subscriptions", async t => {
+	let testDeviceId = "123456";
+	try {
+		const subs = await SubscriptionsApi.get(new SimpleClient("node-gpodder", "node@123"), null, "json");
+	} catch (e) {
+		t.falsy(e);
 	}
 });

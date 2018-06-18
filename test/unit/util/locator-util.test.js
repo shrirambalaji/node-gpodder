@@ -12,11 +12,6 @@ test("locator._prefixString prefixes a string", t => {
 	t.is(locator._prefixString(" world", "hello"), "helloworld");
 });
 
-test("locator._normalizeFormat returns an error when a invalid format is specified", t => {
-	const err = locator._normalizeFormat("wrong-format");
-	t.is(err.message, "Unsupported format");
-});
-
 test("locator._normalizeFormat truncates an extra dot if present in input format", t => {
 	const format = locator._normalizeFormat(".json");
 	t.is(format, "json");
@@ -73,7 +68,10 @@ test("locator.uploadEpisodeActionsUri returns episode actions uri", t => {
 
 test("locator.downloadEpisodeActionsUri returns valid download uri", t => {
 	const downloadUri = locator.downloadEpisodeActionsUri("1337", "https://random.podcast.com", null);
-	t.is(downloadUri, "https://gpodder.net/api/2/episodes/username.json?since=1337&podcast=https://random.podcast.com");
+	t.is(
+		downloadUri,
+		"https://gpodder.net/api/2/episodes/username.json?since=1337&podcast=https://random.podcast.com"
+	);
 });
 
 test("locator.downloadEpisodeActionsUri returns error when both podcast and deviceId are specified ", t => {
@@ -82,7 +80,10 @@ test("locator.downloadEpisodeActionsUri returns error when both podcast and devi
 });
 
 test("locator.deviceSettingsUri returns device settings uri", t => {
-	t.is(locator.deviceSettingsUri("deviceId"), "https://gpodder.net/api/2/devices/username/deviceId.json");
+	t.is(
+		locator.deviceSettingsUri("deviceId"),
+		"https://gpodder.net/api/2/devices/username/deviceId.json"
+	);
 });
 
 test("locator.deviceListUri returns device settings uri", t => {
@@ -103,7 +104,10 @@ test("locator.podcastDataUri returns valid podcast data uri", t => {
 });
 
 test("locator.episodeDataUri returns valid episode data uri", t => {
-	const episodeData = locator.episodeDataUri("https://random.podcast.com", "https://random.episode.com");
+	const episodeData = locator.episodeDataUri(
+		"https://random.podcast.com",
+		"https://random.episode.com"
+	);
 	t.is(
 		episodeData,
 		"https://gpodder.net/api/2/data/episode.json?podcast=https://random.podcast.com&url=https://random.episode.com"
@@ -136,7 +140,10 @@ test("locator.settingsUri returns a error for `device` setting uri", t => {
 
 test("locator.settingsUri returns a valid `podcast` setting uri", t => {
 	const podcast = locator.settingsUri("podcast", "https://random.podcast.com");
-	t.is(podcast, "https://gpodder.net/api/2/settings/username/podcast.json?podcast=https://random.podcast.com");
+	t.is(
+		podcast,
+		"https://gpodder.net/api/2/settings/username/podcast.json?podcast=https://random.podcast.com"
+	);
 });
 
 test("locator.settingsUri returns a error for `podcast` setting uri", t => {
@@ -145,7 +152,11 @@ test("locator.settingsUri returns a error for `podcast` setting uri", t => {
 });
 
 test("locator.settingsUri returns a valid `episode` setting uri", t => {
-	const episode = locator.settingsUri("episode", "https://random.podcast.com", "https://random.episode.com");
+	const episode = locator.settingsUri(
+		"episode",
+		"https://random.podcast.com",
+		"https://random.episode.com"
+	);
 	t.is(
 		episode,
 		"https://gpodder.net/api/2/settings/username/episode.json?podcast=https://random.podcast.com&episode=https://random.episode.com"

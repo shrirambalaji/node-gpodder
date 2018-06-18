@@ -2,6 +2,7 @@ const path = require("path");
 const HOMEDIR = path.join(__dirname, "..", "..");
 const { httpUtil } = require("util-box");
 const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
+const DEFAULT_FORMAT = "opml";
 const SIMPLE_FORMATS = ["opml", "json", "txt"];
 const SETTINGS_TYPES = ["account", "device", "podcast", "episode"];
 
@@ -11,8 +12,13 @@ const SETTINGS_TYPES = ["account", "device", "podcast", "episode"];
    URIs and checking parameters.
  */
 class Locator {
-	constructor(username) {
+	constructor(username, host) {
 		this._username = username;
+		if (!host) {
+			this._host = apiConfiguration.base;
+		} else {
+			this._host = host;
+		}
 	}
 
 	/**
@@ -35,10 +41,18 @@ class Locator {
 		if (/^\./.test(format)) {
 			format = format.substr(1);
 		}
+		// if format, is unsupported, return DEFAULT_FORMAT
 		if (!SIMPLE_FORMATS.includes(format)) {
-			return new Error("Unsupported format");
+			return DEFAULT_FORMAT;
 		}
 		return format;
+	}
+
+	_normalizeHost(host) {
+		if (!/http/.test(host)) {
+			host = this._prefixString(host, "http://");
+		}
+		return host.trim();
 	}
 
 	/**
@@ -67,7 +81,7 @@ class Locator {
 	 * @param {boolean} is_advanced - whether or not to fetch Advanced Api Client Endpoints
 	 */
 	_getBaseUri(endpoint, is_advanced = false) {
-		let base = `${apiConfiguration.base}`;
+		let base = this._normalizeHost(this._host);
 		let versionString = `/api/${apiConfiguration.version}`;
 		if (endpoint) {
 			let apiEndpoint = `${apiConfiguration.endpoints[endpoint]}`;
@@ -81,13 +95,15 @@ class Locator {
 
 	/**
 	 * Get the Simple API URI for a subscription list
-	 * @param {string} deviceId - unique device identifier
+	 * @param {string} deviceId - unique device identifier ( if not present, returns all subscriptions)
 	 * @param {string} format - valid output format
 	 */
 	subscriptionsUri(deviceId, format = "opml") {
-		return `${this._getBaseUri("subscriptions")}/${
-			this._username
-		}/${deviceId}.${this._normalizeFormat(format)}`;
+		if (!deviceId || deviceId.length <= 0) {
+			return `${this._getBaseUri("subscriptions")}/${this._username}.${this._normalizeFormat(format)}`;
+		} else {
+			return `${this._getBaseUri("subscriptions")}/${this._username}/${deviceId}.${this._normalizeFormat(format)}`;
+		}
 	}
 
 	/**
@@ -115,9 +131,7 @@ class Locator {
 	 */
 	searchUri(query, format = "opml") {
 		query = this._urlEncodeString(query);
-		return `${this._getBaseUri("search")}.${this._normalizeFormat(
-			format
-		)}${httpUtil.makeQueryString({ q: query })}`;
+		return `${this._getBaseUri("search")}.${this._normalizeFormat(format)}${httpUtil.makeQueryString({ q: query })}`;
 	}
 
 	/**
@@ -135,9 +149,7 @@ class Locator {
 	 */
 	subscriptionUpdatesUri(deviceId, since = null) {
 		since = this._normalizeSince(since);
-		return `${this._getBaseUri("subscriptions", true)}/${
-			this._username
-		}/${deviceId}.json${httpUtil.makeQueryString({
+		return `${this._getBaseUri("subscriptions", true)}/${this._username}/${deviceId}.json${httpUtil.makeQueryString({
 			since: since
 		})}`;
 	}
@@ -166,9 +178,7 @@ class Locator {
 				podcast: podcast,
 				device: deviceId
 			};
-			return `${this._getBaseUri("episodes", true)}/${
-				this._username
-			}.json${httpUtil.makeQueryString(opts)}`;
+			return `${this._getBaseUri("episodes", true)}/${this._username}.json${httpUtil.makeQueryString(opts)}`;
 		}
 	}
 
