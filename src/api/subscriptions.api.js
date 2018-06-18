@@ -15,7 +15,6 @@ class SubscriptionsApi {
 			} else {
 				if (!SIMPLE_FORMATS.includes(format)) {
 					const e = new Error(`Unsupported Subscription Format: ${format}`);
-					error(e);
 					reject(e);
 				}
 				const locator = new Locator(client.username);
@@ -30,7 +29,8 @@ class SubscriptionsApi {
 						resolve(json);
 					})
 					.catch(e => {
-						error(e);
+						let errMessage = e.message;
+						console.error(errMessage);
 						reject(e);
 					});
 			}
