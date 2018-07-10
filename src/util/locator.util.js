@@ -1,10 +1,10 @@
-const path = require("path");
-const HOMEDIR = path.join(__dirname, "..", "..");
-const { httpUtil } = require("util-box");
-const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
-const DEFAULT_FORMAT = "opml";
-const SIMPLE_FORMATS = ["opml", "json", "txt"];
-const SETTINGS_TYPES = ["account", "device", "podcast", "episode"];
+const path = require('path');
+const HOMEDIR = path.join(__dirname, '..', '..');
+const { httpUtil } = require('util-box');
+const apiConfiguration = require(path.join(HOMEDIR, 'config', 'api.config'));
+const DEFAULT_FORMAT = 'opml';
+const SIMPLE_FORMATS = [ 'opml', 'json', 'txt' ];
+const SETTINGS_TYPES = [ 'account', 'device', 'podcast', 'episode' ];
 
 /**
  * This helper class abstracts the URIs for the gpodder.net
@@ -50,7 +50,7 @@ class Locator {
 
 	_normalizeHost(host) {
 		if (!/http/.test(host)) {
-			host = this._prefixString(host, "http://");
+			host = this._prefixString(host, 'http://');
 		}
 		return host.trim();
 	}
@@ -95,14 +95,23 @@ class Locator {
 
 	/**
 	 * Get the Simple API URI for a subscription list
-	 * @param {string} deviceId - unique device identifier ( if not present, returns all subscriptions)
+	 * @param {string} deviceId - ( optional ) unique device identifier
 	 * @param {string} format - valid output format
+	 * @returns {object} - returns device subscriptions if deviceId is present, else all subscriptions are returned
 	 */
-	subscriptionsUri(deviceId, format = "opml") {
-		if (!deviceId || deviceId.length <= 0) {
-			return `${this._getBaseUri("subscriptions")}/${this._username}.${this._normalizeFormat(format)}`;
+	subscriptionsUri(deviceId, format) {
+		// if only single parameter is provided, it represents the format
+		if (deviceId && deviceId.length > 0 && !format) {
+			format = deviceId;
+			deviceId = null;
+			// since the deviceId is null, return get subscriptions for all.
+			return `${this._getBaseUri('subscriptions')}/${this._username}.${this._normalizeFormat(
+				format
+			)}`;
 		} else {
-			return `${this._getBaseUri("subscriptions")}/${this._username}/${deviceId}.${this._normalizeFormat(format)}`;
+			if (!format) format = 'opml';
+			return `${this._getBaseUri('subscriptions')}/${this
+				._username}/${deviceId}.${this._normalizeFormat(format)}`;
 		}
 	}
 
@@ -111,8 +120,8 @@ class Locator {
 	 * @param {number} count
 	 * @param {string} format - valid output format
 	 */
-	toplistUri(count = 50, format = "opml") {
-		return `${this._getBaseUri("toplist")}/${count}.${this._normalizeFormat(format)}`;
+	toplistUri(count = 50, format = 'opml') {
+		return `${this._getBaseUri('toplist')}/${count}.${this._normalizeFormat(format)}`;
 	}
 
 	/**
@@ -120,8 +129,8 @@ class Locator {
 	 * @param {number} count - (optional, defaults to 10) max. number of suggestions to retrieve
 	 * @param {string} format - valid output format
 	 */
-	suggestionsUri(count = 10, format = "opml") {
-		return `${this._getBaseUri("suggestions")}/${count}.${this._normalizeFormat(format)}`;
+	suggestionsUri(count = 10, format = 'opml') {
+		return `${this._getBaseUri('suggestions')}/${count}.${this._normalizeFormat(format)}`;
 	}
 
 	/**
@@ -129,9 +138,11 @@ class Locator {
 	 * @param {string} query - input search query
 	 * @param {string} format - valid output format
 	 */
-	searchUri(query, format = "opml") {
+	searchUri(query, format = 'opml') {
 		query = this._urlEncodeString(query);
-		return `${this._getBaseUri("search")}.${this._normalizeFormat(format)}${httpUtil.makeQueryString({ q: query })}`;
+		return `${this._getBaseUri('search')}.${this._normalizeFormat(
+			format
+		)}${httpUtil.makeQueryString({ q: query })}`;
 	}
 
 	/**
@@ -139,7 +150,7 @@ class Locator {
 	 * @param {string} deviceId - unique device identifier
 	 */
 	addRemoveSubscriptionsUri(deviceId) {
-		return `${this._getBaseUri("subscriptions", true)}/${this._username}/${deviceId}.json`;
+		return `${this._getBaseUri('subscriptions', true)}/${this._username}/${deviceId}.json`;
 	}
 
 	/**
@@ -149,7 +160,8 @@ class Locator {
 	 */
 	subscriptionUpdatesUri(deviceId, since = null) {
 		since = this._normalizeSince(since);
-		return `${this._getBaseUri("subscriptions", true)}/${this._username}/${deviceId}.json${httpUtil.makeQueryString({
+		return `${this._getBaseUri('subscriptions', true)}/${this
+			._username}/${deviceId}.json${httpUtil.makeQueryString({
 			since: since
 		})}`;
 	}
@@ -158,7 +170,7 @@ class Locator {
 	 * Get the Advanced API URI for uploading episode actions
 	 */
 	uploadEpisodeActionsUri() {
-		return `${this._getBaseUri("episodes", true)}/${this._username}.json`;
+		return `${this._getBaseUri('episodes', true)}/${this._username}.json`;
 	}
 
 	/**
@@ -178,7 +190,8 @@ class Locator {
 				podcast: podcast,
 				device: deviceId
 			};
-			return `${this._getBaseUri("episodes", true)}/${this._username}.json${httpUtil.makeQueryString(opts)}`;
+			return `${this._getBaseUri('episodes', true)}/${this
+				._username}.json${httpUtil.makeQueryString(opts)}`;
 		}
 	}
 
@@ -187,14 +200,14 @@ class Locator {
 	 * @param {string} deviceId - unique device identifier
 	 */
 	deviceSettingsUri(deviceId) {
-		return `${this._getBaseUri("devices", true)}/${this._username}/${deviceId}.json`;
+		return `${this._getBaseUri('devices', true)}/${this._username}/${deviceId}.json`;
 	}
 
 	/**
 	 * Get the Advanced API URI for retrieving the device list
 	 */
 	deviceListUri() {
-		return `${this._getBaseUri("devices", true)}/${this._username}.json`;
+		return `${this._getBaseUri('devices', true)}/${this._username}.json`;
 	}
 
 	/**
@@ -202,7 +215,7 @@ class Locator {
 	 * @param {number} count - (optional, defaults to 50) max. number of results to retrieve
 	 */
 	toptagsUri(count = 50) {
-		return `${this._getBaseUri("tags", true)}/${count}.json`;
+		return `${this._getBaseUri('tags', true)}/${count}.json`;
 	}
 
 	/**
@@ -211,7 +224,7 @@ class Locator {
 	 * @param {number} count - (optional, defaults to 50) max. number of results to retrieve
 	 */
 	podcastsOfATagUri(tag, count = 50) {
-		return `${this._getBaseUri("tag", true)}/${tag}/${count}.json`;
+		return `${this._getBaseUri('tag', true)}/${tag}/${count}.json`;
 	}
 
 	/**
@@ -222,7 +235,7 @@ class Locator {
 		let opts = {
 			url: podcast
 		};
-		return `${this._getBaseUri("data", true)}/podcast.json${httpUtil.makeQueryString(opts)}`;
+		return `${this._getBaseUri('data', true)}/podcast.json${httpUtil.makeQueryString(opts)}`;
 	}
 
 	/**
@@ -235,14 +248,14 @@ class Locator {
 			podcast: podcast,
 			url: episode
 		};
-		return `${this._getBaseUri("data", true)}/episode.json${httpUtil.makeQueryString(opts)}`;
+		return `${this._getBaseUri('data', true)}/episode.json${httpUtil.makeQueryString(opts)}`;
 	}
 
 	/**
 	 * Get the Advanced API URI for listing favorite episodes
 	 */
 	favoriteEpisodesUri() {
-		return `${this._getBaseUri("favorites", true)}/${this._username}.json`;
+		return `${this._getBaseUri('favorites', true)}/${this._username}.json`;
 	}
 
 	/**
@@ -251,30 +264,33 @@ class Locator {
 	 * @param {Array} params - input parameters that differ based on each setting type.
 	 */
 	settingsUri(type, ...params) {
-		if (!SETTINGS_TYPES.includes(type)) return new Error("Unsupported Setting Type");
+		if (!SETTINGS_TYPES.includes(type)) return new Error('Unsupported Setting Type');
 		else {
-			let settingsUri = `${this._getBaseUri("settings", true)}/${this._username}/${type}.json`;
+			let settingsUri = `${this._getBaseUri('settings', true)}/${this
+				._username}/${type}.json`;
 			switch (type) {
-				case "account":
+				case 'account':
 					return settingsUri;
 					break;
 
-				case "device":
+				case 'device':
 					let deviceName = params[0];
-					if (!deviceName) return new Error("Device Name is not specified");
+					if (!deviceName) return new Error('Device Name is not specified');
 					else return `${settingsUri}${httpUtil.makeQueryString({ device: deviceName })}`;
 					break;
 
-				case "podcast":
+				case 'podcast':
 					let podcastUrl = params[0];
-					if (!podcastUrl) return new Error("Podcast Url is not specified");
-					else return `${settingsUri}${httpUtil.makeQueryString({ podcast: podcastUrl })}`;
+					if (!podcastUrl) return new Error('Podcast Url is not specified');
+					else
+						return `${settingsUri}${httpUtil.makeQueryString({ podcast: podcastUrl })}`;
 					break;
 
-				case "episode":
+				case 'episode':
 					let podcast = params[0];
 					let episode = params[1];
-					if (!podcast || !episode) return new Error("Podcast or Episode Url is not specified");
+					if (!podcast || !episode)
+						return new Error('Podcast or Episode Url is not specified');
 					else
 						return `${settingsUri}${httpUtil.makeQueryString({
 							podcast: podcast,

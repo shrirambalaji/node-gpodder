@@ -60,3 +60,4 @@ typings/
 # Holds temporary directories, backups and other files
 tmp
 
+.DS_Store
