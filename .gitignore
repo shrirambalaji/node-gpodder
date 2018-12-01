@@ -59,5 +59,6 @@ typings/
 
 # Holds temporary directories, backups and other files
 tmp
+.vscode
 
 .DS_Store
