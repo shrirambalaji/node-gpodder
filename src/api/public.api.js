@@ -11,6 +11,8 @@ const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
 const CONSTANTS = apiConfiguration.constants;
 const Locator = require(path.join(SRCDIR, "util", "locator.util"));
 const Podcast = require(path.join(SRCDIR, "models")).Podcast;
+const Tag = require(path.join(SRCDIR, "models")).Tag;
+
 class PublicApi {
 	constructor() {
 		const locator = new Locator();
@@ -47,11 +49,26 @@ class PublicApi {
 	 * @param {number} count - (optional) number of podcasts returned. Default = 50. Range = 1 (minimum) to 100 (maximum)
 	 * @returns {object} - a list of podcast objects
 	 */
-	getTopList(count = CONSTANTS.TOPLIST_DEFAULT) {
+	getTopList(count = CONSTANTS.TOPLIST_DEFAULT, format = null) {
+		const response_format = format || CONSTANTS.FORMAT_DEFAULT
 		return new Promise((resolve, reject) => {
-			fetch(this._locator.toplistUri(count, CONSTANTS.FORMAT_DEFAULT))
+			fetch(this._locator.toplistUri(count, response_format))
 				.then(response => httpUtil.handleApiResponse(response))
 				.then(podcastArray => resolve(this._toDataModel(podcastArray, Podcast)))
+				.catch(err => reject(err));
+		});
+	}
+
+		/**
+	 * Get a list of top tags
+	 * @param {number} count - (optional) number of tags returned. Default = 50. Range = 1 (minimum) to 100 (maximum)
+	 * @returns {object} - a list of podcast objects
+	 */
+	getTopTags(count = CONSTANTS.TOPLIST_DEFAULT) {
+		return new Promise((resolve, reject) => {
+			fetch(this._locator.toptagsUri(count, CONSTANTS.FORMAT_DEFAULT))
+				.then(response => httpUtil.handleApiResponse(response))
+				.then(tagArray => resolve(this._toDataModel(tagArray, Tag)))
 				.catch(err => reject(err));
 		});
 	}
@@ -61,12 +78,13 @@ class PublicApi {
 	 * @param {string} query - podcast search query
 	 * @returns {array} - an array of podcast objects
 	 */
-	searchPodcasts(query) {
+	searchPodcasts(query, format = null, options = {}) {
+		const response_format = format || CONSTANTS.FORMAT_DEFAULT;
 		return new Promise((resolve, reject) => {
 			if (!query) {
 				reject(new Error("Missing or invalid parameters: query"));
 			} else {
-				fetch(this._locator.searchUri(query, CONSTANTS.FORMAT_DEFAULT))
+				fetch(this._locator.searchUri(query, response_format, options))
 					.then(response => httpUtil.handleApiResponse(response))
 					.then(podcastArray => resolve(this._toDataModel(podcastArray, Podcast)))
 					.catch(err => reject(err));

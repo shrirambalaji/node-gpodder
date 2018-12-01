@@ -8,7 +8,8 @@ class Tag {
 	 * @param {string} tag -  name of the tag
 	 * @param {string} usage - usage of the tag
 	 */
-	constructor(tag, usage) {
+	constructor(title, tag, usage) {
+		this.title = title
 		this.tag = tag;
 		this.usage = usage;
 	}
