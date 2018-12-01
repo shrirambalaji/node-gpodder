@@ -19,6 +19,7 @@ class SimpleClient {
 		this.username = username;
 		this.password = password;
 		this.host = host;
+		this.isAdvanced = false;
 		if (!userAgent) this.userAgent = `node-gpodder`;
 		else this.userAgent = userAgent;
 		// this value can be overwritten if needed
