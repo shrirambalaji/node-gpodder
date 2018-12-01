@@ -5,7 +5,7 @@
 
 Node.js client library for gpodder.net
 
-### Gpodder API Methods Included
+### Supported Gpodder API Endpoints
 
 * [x] Public Api
 * [x] Authentication API
