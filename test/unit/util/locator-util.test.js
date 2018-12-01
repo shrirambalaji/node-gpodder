@@ -12,11 +12,6 @@ test("locator._prefixString prefixes a string", t => {
 	t.is(locator._prefixString(" world", "hello"), "helloworld");
 });
 
-test("locator._normalizeFormat returns an error when a invalid format is specified", t => {
-	const err = locator._normalizeFormat("wrong-format");
-	t.is(err.message, "Unsupported format");
-});
-
 test("locator._normalizeFormat truncates an extra dot if present in input format", t => {
 	const format = locator._normalizeFormat(".json");
 	t.is(format, "json");

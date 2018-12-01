@@ -1,24 +1,77 @@
 "use strict";
 const path = require("path");
 const fetch = require("node-fetch");
-const {
-	error,
-	success,
-	debug,
-	httpUtil
-} = require("util-box");
+const { error, success, debug, httpUtil } = require("util-box");
 const Promise = require("bluebird");
 const SRCDIR = path.join(__dirname, "..", "..", "src");
 const Locator = require(path.join(SRCDIR, "util", "locator.util"));
+const meta = {
+	name: "Authentication API"
+};
+
 module.exports = {
-	login: function (username) {
-		return (new Promise(function (resolve, reject) {
-
-		}));
+	/**
+	 * Log in the given user for the given device via HTTP Basic Auth and Cookies
+	 * @param {*} client - Advanced Api Client
+	 * @returns response with a valid `sessionid` cookie set.
+	 */
+	login: function(client) {
+		return new Promise(function(resolve, reject) {
+			if (!client.isAdvanced)
+				reject(
+					new Error(
+						`The ${meta.name} cannot be accessed with the Simple API Client. It requires using the Advanced API Client.`
+					)
+				);
+			else {
+				if (!client._hasCredentials()) {
+					reject(new Error("Missing or invalid client credentials"));
+				} else {
+					const locator = new Locator(client.username);
+					const uri = locator.postLogin();
+					let params = client._authorizeRequest({ method: "POST", credentials: "same-origin" });
+					fetch(uri, params)
+						.then(response => httpUtil.handleApiResponse(response))
+						.then(json => {
+							resolve(json);
+						})
+						.catch(e => {
+							reject(e);
+						});
+				}
+			}
+		});
 	},
-	logout: function (username) {
-		return (new Promise(function (resolve, reject) {
 
-		}));
+	/**
+	 * Log out the given user for the given device.
+	 * @param {*} client - Advanced Api Client
+	 */
+	logout: function(client) {
+		return new Promise(function(resolve, reject) {
+			if (!client.isAdvanced)
+				reject(
+					new Error(
+						`The ${meta.name} cannot be accessed with the Simple API Client. It requires using the Advanced API Client.`
+					)
+				);
+			else {
+				if (!client._hasCredentials()) {
+					reject(new Error("Missing or invalid client credentials"));
+				} else {
+					const locator = new Locator(client.username);
+					const uri = locator.postLogout();
+					let params = client._authorizeRequest({ method: "POST", credentials: "same-origin" });
+					fetch(uri, params)
+						.then(response => httpUtil.handleApiResponse(response))
+						.then(json => {
+							resolve(json);
+						})
+						.catch(e => {
+							reject(e);
+						});
+				}
+			}
+		});
 	}
-}
+};
