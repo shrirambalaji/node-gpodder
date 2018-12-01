@@ -1,6 +1,6 @@
 {
   "name": "node-gpodder",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "description": "A client library for gpodder",
   "main": "src/index.js",
   "scripts": {
@@ -10,10 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/Shriram-Balaji/node-gpodder.git"
   },
-  "keywords": [
-    "[\"gpodder\"",
-    "\"podcast\"]"
-  ],
+  "keywords": ["[\"gpodder\"", "\"podcast\"]"],
   "ava": {
     "files": "test/**/*.js"
   },
