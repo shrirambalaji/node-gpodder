@@ -12,8 +12,3 @@ test("client can be initialised", t => {
 	t.is(sc.host, "somehost");
 	t.is(sc._hasCredentials(), true);
 });
-
-test("client can get subscriptions", async t => {
-	const sc = new SimpleClient("hello", "password", "somehost");
-	t.pass();
-});

@@ -76,7 +76,9 @@ test("getPodcastsOfATag throws an error when input tag is not provided", async t
 
 test("getPodcastData returns metadata for specified podcast", async t => {
 	try {
-		const podcastData = await PublicApi.getPodcastData("http://feeds.feedburner.com/linuxoutlaws");
+		const podcastData = await PublicApi.getPodcastData(
+			"http://feeds.feedburner.com/linuxoutlaws"
+		);
 		t.truthy(podcastData.url);
 		t.truthy(podcastData.title);
 		t.truthy(podcastData.description);
@@ -101,7 +103,9 @@ test("getPodcastData throws an error if the uri is not specified", async t => {
 
 test("getPodcastData throws an 404 for an invalid podcast uri", async t => {
 	try {
-		const podcastData = await PublicApi.getPodcastData("http://random.nope.com");
+		const podcastData = await PublicApi.getPodcastData(
+			"http://random.nope.com"
+		);
 	} catch (err) {
 		t.truthy(err);
 		t.is(err.message, "Expected 2xx, found 404");

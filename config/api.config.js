@@ -11,10 +11,12 @@ module.exports = {
 		data: "/data",
 		favorites: "/favorites",
 		settings: "/settings",
-		episodes: "/episodes"
+		episodes: "/episodes",
+		updates: "/updates"
 	},
 	constants: {
 		TOPLIST_DEFAULT: 50,
+		DEFAULT_COUNT: 10,
 		FORMAT_DEFAULT: "json",
 		USER_AGENT: "node-gpodder"
 	},

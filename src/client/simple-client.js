@@ -1,4 +1,5 @@
 const path = require("path");
+const B64Encode = require("base-64").encode;
 const HOMEDIR = path.join(__dirname, "..", "..");
 const SRCDIR = path.join(HOMEDIR, "src");
 const config = require(path.join(HOMEDIR, "config", "api.config"));
@@ -18,6 +19,7 @@ class SimpleClient {
 		this.username = username;
 		this.password = password;
 		this.host = host;
+		this.isAdvanced = false;
 		if (!userAgent) this.userAgent = `node-gpodder`;
 		else this.userAgent = userAgent;
 		// this value can be overwritten if needed
@@ -32,23 +34,15 @@ class SimpleClient {
 	}
 
 	/**
-	 * Api Method to fetch subscriptions for a specified device
-	 * @param {string} deviceId - unique device identifier
+	 * internal method used to add Basic HTTP Authentication to the request
+	 * @param {*} options - input request options
 	 */
-	getSubscriptions(deviceId) {
-		return new Promise((resolve, reject) => {
-			Subscriptions.get(this, deviceId, FORMAT)
-				.then(response => resolve(response))
-				.catch(err => reject(err));
-		});
-	}
-
-	putSubscriptions() {
-		// put subscriptions
-	}
-
-	getSuggestions() {
-		// get Suggestions
+	_authorizeRequest(options) {
+		if (!options) options = {};
+		if (!options.headers) options.headers = {};
+		const encodedCredentials = B64Encode(`${this.username}:${this.password}`);
+		options.headers["Authorization"] = `Basic ${encodedCredentials}`;
+		return options;
 	}
 }
 module.exports = SimpleClient;
