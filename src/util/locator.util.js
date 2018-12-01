@@ -138,11 +138,17 @@ class Locator {
 	 * @param {string} query - input search query
 	 * @param {string} format - valid output format
 	 */
-	searchUri(query, format = 'opml') {
+	searchUri(query, format = 'opml', options = {}) {
 		query = this._urlEncodeString(query);
+		const searchParams = {}
+		searchParams.q = options.q || query;
+		if(options.isJsonP)
+			searchParams['jsonp'] = options.isJsonP
+		if(options.shouldScaleLogo)
+			searchParams['scale_logo'] = options.shouldScaleLogo
 		return `${this._getBaseUri('search')}.${this._normalizeFormat(
 			format
-		)}${httpUtil.makeQueryString({ q: query })}`;
+		)}${httpUtil.makeQueryString(searchParams)}`;
 	}
 
 	/**
@@ -299,6 +305,14 @@ class Locator {
 					break;
 			}
 		}
+	}
+
+	postLogin() {
+		return `${this._getBaseUri('auth', true)}/login.json`;
+	}
+
+	postLogout() {
+		return `${this._getBaseUri('auth', true)}/logout.json`;
 	}
 
 	/**
