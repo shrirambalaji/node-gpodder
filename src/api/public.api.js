@@ -50,7 +50,7 @@ class PublicApi {
 	 * @returns {object} - a list of podcast objects
 	 */
 	getTopList(count = CONSTANTS.TOPLIST_DEFAULT, format = null) {
-		const response_format = format || CONSTANTS.FORMAT_DEFAULT
+		const response_format = format || CONSTANTS.FORMAT_DEFAULT;
 		return new Promise((resolve, reject) => {
 			fetch(this._locator.toplistUri(count, response_format))
 				.then(response => httpUtil.handleApiResponse(response))
@@ -59,7 +59,7 @@ class PublicApi {
 		});
 	}
 
-		/**
+	/**
 	 * Get a list of top tags
 	 * @param {number} count - (optional) number of tags returned. Default = 50. Range = 1 (minimum) to 100 (maximum)
 	 * @returns {object} - a list of podcast objects
