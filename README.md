@@ -7,7 +7,7 @@ Node.js client library for gpodder.net
 
 ### Supported Gpodder API Endpoints
 
-* [x] Public Api
+* [x] Public API
 * [x] Authentication API
 * [x] Directory API
 * [x] Suggestions API
@@ -18,7 +18,7 @@ Node.js client library for gpodder.net
 * [ ] Podcast Lists API
 * [ ] Settings API
 * [ ] Device Synchronization API
-* [ ] Client Parametrization
+* [ ] Client Parametrization API
 
 ## License
 
