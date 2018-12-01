@@ -15,6 +15,7 @@ module.exports = {
 	},
 	constants: {
 		TOPLIST_DEFAULT: 50,
+		DEFAULT_COUNT: 10,
 		FORMAT_DEFAULT: "json",
 		USER_AGENT: "node-gpodder"
 	},
