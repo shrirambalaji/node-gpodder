@@ -5,6 +5,7 @@
   "scripts": {
     "test": "ava"
   },
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Shriram-Balaji/node-gpodder.git"
