@@ -1,10 +1,9 @@
 "use strict";
-const path = require("path");
+
 const fetch = require("node-fetch");
-const { error, success, debug, httpUtil } = require("util-box");
+const { httpUtil } = require("util-box");
 const Promise = require("bluebird");
-const SRCDIR = path.join(__dirname, "..", "..", "src");
-const Locator = require(path.join(SRCDIR, "util", "locator.util"));
+const Locator = require("../util/locator.util");
 const meta = {
 	name: "Authentication API"
 };

@@ -1,14 +1,11 @@
-const path = require("path");
 const test = require("ava");
-const HOMEDIR = path.join(__dirname, "..", "..", "..");
-const SRCDIR = path.join(HOMEDIR, "src");
-const TESTDIR = path.join(HOMEDIR, "test");
-const SimpleClient = require(path.join(SRCDIR, "client", "simple-client"));
-const AdvancedClient = require(path.join(SRCDIR, "client", "advanced-client"));
-const FavoritesApi = require(path.join(SRCDIR, "api")).FavoritesApi;
+
+const SimpleClient = require("../../../src/client/simple-client");
+const AdvancedClient = require("../../../src/client/advanced-client");
+const { Favorites } = require("../../../src/api");
+
 let client = null;
 let advancedClient = null;
-let testDeviceId = "device12345";
 
 test.beforeEach(t => {
 	client = new SimpleClient("node-gpodder", "node@123");
@@ -17,7 +14,7 @@ test.beforeEach(t => {
 
 test("FavoritesApi throws an error when accessed with SimpleClient", async t => {
 	try {
-		const favorites = await FavoritesApi.getFavorites(client);
+		const favorites = await Favorites.getFavorites(client);
 		t.truthy(favorites);
 	} catch (error) {
 		t.truthy(error, "message");
@@ -30,7 +27,7 @@ test("FavoritesApi throws an error when accessed with SimpleClient", async t => 
 
 test("FavoritesApi returns the list of favourite episodes", async t => {
 	try {
-		const favorites = await FavoritesApi.getFavorites(advancedClient);
+		const favorites = await Favorites.getFavorites(advancedClient);
 		t.truthy(favorites);
 	} catch (error) {
 		t.falsy(error);

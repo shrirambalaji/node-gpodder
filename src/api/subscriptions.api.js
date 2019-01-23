@@ -5,8 +5,7 @@ const outputUtil = require("util-box").outputUtil;
 const httpUtil = require("util-box").httpUtil;
 const Promise = require("bluebird");
 const { error, success, debug } = outputUtil;
-const SRCDIR = path.join(__dirname, "..", "..", "src");
-const Locator = require(path.join(SRCDIR, "util", "locator.util"));
+const Locator = require("../util/locator.util");
 const SIMPLE_FORMATS = ["opml", "json", "txt"];
 class SubscriptionsApi {
 	/**

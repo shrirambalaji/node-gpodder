@@ -1,16 +1,8 @@
-const path = require("path");
-const fileUtil = require("util-box").fileUtil;
 const test = require("ava");
-const HOMEDIR = path.join(__dirname, "..", "..", "..");
-const SRCDIR = path.join(HOMEDIR, "src");
-const TESTDIR = path.join(HOMEDIR, "test");
-const mockSubscriptions = require(path.join(
-	TESTDIR,
-	"fixtures",
-	"subscriptions.json"
-));
-const SimpleClient = require(path.join(SRCDIR, "client", "simple-client"));
-const SubscriptionsApi = require(path.join(SRCDIR, "api")).SubscriptionsApi;
+
+const SimpleClient = require("../../../src/client/simple-client");
+const { Subscriptions: SubscriptionsApi } = require("../../../src/api");
+
 let client = null;
 let testDeviceId = "device12345";
 
@@ -22,11 +14,7 @@ test("getDeviceSubscriptions throws an Unauthenticated Error when credentials ar
 	let fakeClient = new SimpleClient("test", "password");
 	let fakeDeviceId = "testDeviceId";
 	try {
-		const subs = await SubscriptionsApi.getDeviceSubscriptions(
-			fakeClient,
-			fakeDeviceId,
-			"json"
-		);
+		const subs = await SubscriptionsApi.getDeviceSubscriptions(fakeClient, fakeDeviceId, "json");
 	} catch (e) {
 		t.is(e.message, "Expected 2xx, found 401");
 	}
@@ -34,11 +22,7 @@ test("getDeviceSubscriptions throws an Unauthenticated Error when credentials ar
 
 test("getDeviceSubscriptions throws an error when subscription format is unsupported", async t => {
 	try {
-		const subs = await SubscriptionsApi.getDeviceSubscriptions(
-			client,
-			"deviceid",
-			"oops"
-		);
+		const subs = await SubscriptionsApi.getDeviceSubscriptions(client, "deviceid", "oops");
 	} catch (e) {
 		t.is(e.message, "Unsupported Subscription Format: oops");
 	}
@@ -47,11 +31,7 @@ test("getDeviceSubscriptions throws an error when subscription format is unsuppo
 test("getDeviceSubscriptions returns subscriptions for the specified deviceId", async t => {
 	let client = new SimpleClient("node-gpodder", "node@123");
 	try {
-		const subs = await SubscriptionsApi.getDeviceSubscriptions(
-			client,
-			testDeviceId,
-			"json"
-		);
+		const subs = await SubscriptionsApi.getDeviceSubscriptions(client, testDeviceId, "json");
 		t.truthy(subs);
 	} catch (e) {
 		t.falsy(e);
@@ -71,16 +51,8 @@ test.skip("uploadDeviceSubscriptions returns the recent subscription changes", a
 	try {
 		let testDeviceId = "device12345";
 		// this doesnt seem to work, returns 400.
-		const body = [
-			"http://lugradio.org/episodes.rss",
-			"http://feeds2.feedburner.com/LinuxOutlaws"
-		];
-		const subs = await SubscriptionsApi.uploadDeviceSubscriptions(
-			client,
-			testDeviceId,
-			"json",
-			body
-		);
+		const body = ["http://lugradio.org/episodes.rss", "http://feeds2.feedburner.com/LinuxOutlaws"];
+		const subs = await SubscriptionsApi.uploadDeviceSubscriptions(client, testDeviceId, "json", body);
 	} catch (e) {
 		t.falsy(e);
 	}
@@ -89,11 +61,7 @@ test.skip("uploadDeviceSubscriptions returns the recent subscription changes", a
 test("getSubscriptionChanges returns all subscription updates since the specified timestamp", async t => {
 	try {
 		let since = 12347;
-		const subs = await SubscriptionsApi.getSubscriptionChanges(
-			client,
-			testDeviceId,
-			since
-		);
+		const subs = await SubscriptionsApi.getSubscriptionChanges(client, testDeviceId, since);
 		t.truthy(subs);
 		t.truthy(subs.add);
 		t.truthy(subs.remove);

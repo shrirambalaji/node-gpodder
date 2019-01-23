@@ -1,15 +1,9 @@
 "use strict";
-const path = require("path");
+
 const fetch = require("node-fetch");
-const outputUtil = require("util-box").outputUtil;
 const httpUtil = require("util-box").httpUtil;
 const Promise = require("bluebird");
-const { error, success, debug } = outputUtil;
-const HOMEDIR = path.join(__dirname, "..", "..");
-const SRCDIR = path.join(HOMEDIR, "src");
-const Locator = require(path.join(SRCDIR, "util", "locator.util"));
-const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
-const CONSTANTS = apiConfiguration.constants;
+const Locator = require("../util/locator.util");
 const meta = { name: "FavoritesApi" };
 
 // Fetch Favorite Episodes

@@ -1,12 +1,9 @@
-const path = require("path");
 const test = require("ava");
-const HOMEDIR = path.join(__dirname, "..", "..", "..");
-const SRCDIR = path.join(HOMEDIR, "src");
-const TESTDIR = path.join(HOMEDIR, "test");
-const SimpleClient = require(path.join(SRCDIR, "client", "simple-client"));
-const SuggestionsApi = require(path.join(SRCDIR, "api")).SuggestionsApi;
+
+const SimpleClient = require("../../../src/client/simple-client");
+const { Suggestions: SuggestionsApi } = require("../../../src/api");
+
 let client = null;
-let testDeviceId = "device12345";
 
 test.beforeEach(t => {
 	client = new SimpleClient("node-gpodder", "node@123");

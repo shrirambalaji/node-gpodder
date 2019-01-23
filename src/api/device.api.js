@@ -1,16 +1,11 @@
 "use strict";
-const path = require("path");
+
 const fetch = require("node-fetch");
-const outputUtil = require("util-box").outputUtil;
 const httpUtil = require("util-box").httpUtil;
 const Promise = require("bluebird");
-const { error, success, debug } = outputUtil;
-const HOMEDIR = path.join(__dirname, "..", "..");
-const SRCDIR = path.join(HOMEDIR, "src");
-const Locator = require(path.join(SRCDIR, "util", "locator.util"));
-const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
-const CONSTANTS = apiConfiguration.constants;
+const Locator = require("../util/locator.util");
 const meta = { name: "DeviceApi" };
+
 class DeviceApi {
 	getDevices(client) {
 		return new Promise((resolve, reject) => {
@@ -53,8 +48,7 @@ class DeviceApi {
 			} else {
 				if (!client._hasCredentials()) {
 					reject(new Error("Missing or invalid client credentials"));
-				} else if (!body || !caption || !type || !deviceId)
-					reject(new Error("Missing or invalid required parameters"));
+				} else if (!body || !caption || !type || !deviceId) reject(new Error("Missing or invalid required parameters"));
 				else {
 					const locator = new Locator(client.username);
 					const uri = locator.deviceSettingsUri(deviceId);

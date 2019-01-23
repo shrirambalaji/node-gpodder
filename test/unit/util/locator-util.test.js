@@ -1,9 +1,8 @@
-const path = require("path");
-const HOMEDIR = path.join(__dirname, "..", "..", "..");
-const SRCDIR = path.join(HOMEDIR, "src");
 const test = require("ava");
-const Locator = require(path.join(SRCDIR, "util", "locator.util"));
+const Locator = require("../../../src/util/locator.util");
+
 let locator = null;
+
 test.before(t => {
 	locator = new Locator("username");
 });

@@ -5,13 +5,12 @@ const Promise = require("bluebird");
 const toCamelCase = require("camelcase-keys");
 const objectAssign = require("object-assign");
 const { error, success, debug, httpUtil } = require("util-box");
-const HOMEDIR = path.join(__dirname, "..", "..");
+const HOMEDIR = path.join(__dirname, "..");
 const SRCDIR = path.join(HOMEDIR, "src");
-const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
+const Locator = require("../util/locator.util");
+const apiConfiguration = require("../../config/api.config");
 const CONSTANTS = apiConfiguration.constants;
-const Locator = require(path.join(SRCDIR, "util", "locator.util"));
-const Podcast = require(path.join(SRCDIR, "models")).Podcast;
-const Tag = require(path.join(SRCDIR, "models")).Tag;
+const { Podcast, Tag } = require("../models");
 
 class PublicApi {
 	constructor() {

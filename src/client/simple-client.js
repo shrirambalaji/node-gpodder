@@ -1,11 +1,4 @@
-const path = require("path");
 const B64Encode = require("base-64").encode;
-const HOMEDIR = path.join(__dirname, "..", "..");
-const SRCDIR = path.join(HOMEDIR, "src");
-const config = require(path.join(HOMEDIR, "config", "api.config"));
-const Subscriptions = require(path.join(SRCDIR, "api")).subscriptionsApi;
-const Suggestions = require(path.join(SRCDIR, "api")).suggestionsApi;
-const FORMAT = "json";
 
 class SimpleClient {
 	/**

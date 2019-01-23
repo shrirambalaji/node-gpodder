@@ -1,7 +1,5 @@
-const path = require("path");
-const HOMEDIR = path.join(__dirname, "..", "..");
 const { httpUtil } = require("util-box");
-const apiConfiguration = require(path.join(HOMEDIR, "config", "api.config"));
+const apiConfiguration = require("../../config/api.config.js");
 const DEFAULT_FORMAT = "opml";
 const SIMPLE_FORMATS = ["opml", "json", "txt"];
 const SETTINGS_TYPES = ["account", "device", "podcast", "episode"];
