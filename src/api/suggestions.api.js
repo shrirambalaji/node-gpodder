@@ -1,6 +1,6 @@
 "use strict";
 const path = require("path");
-const fetch = require("node-fetch");
+const fetch = require("cross-fetch");
 const outputUtil = require("util-box").outputUtil;
 const httpUtil = require("util-box").httpUtil;
 const Promise = require("bluebird");

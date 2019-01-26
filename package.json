@@ -32,8 +32,8 @@
     "base-64": "^0.1.0",
     "bluebird": "^3.5.1",
     "camelcase-keys": "^4.2.0",
+    "cross-fetch": "^3.0.0",
     "json_": "^2.0.0",
-    "node-fetch": "^2.1.2",
     "object-assign": "^4.1.1",
     "signale": "^1.2.1",
     "util-box": "^1.0.12"

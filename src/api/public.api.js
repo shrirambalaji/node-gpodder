@@ -1,12 +1,8 @@
 "use strict";
-const path = require("path");
-const fetch = require("node-fetch");
+const fetch = require("cross-fetch");
 const Promise = require("bluebird");
 const toCamelCase = require("camelcase-keys");
-const objectAssign = require("object-assign");
-const { error, success, debug, httpUtil } = require("util-box");
-const HOMEDIR = path.join(__dirname, "..");
-const SRCDIR = path.join(HOMEDIR, "src");
+const { httpUtil } = require("util-box");
 const Locator = require("../util/locator.util");
 const apiConfiguration = require("../../config/api.config");
 const CONSTANTS = apiConfiguration.constants;

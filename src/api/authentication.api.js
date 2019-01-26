@@ -1,6 +1,6 @@
 "use strict";
 
-const fetch = require("node-fetch");
+const fetch = require("cross-fetch");
 const { httpUtil } = require("util-box");
 const Promise = require("bluebird");
 const Locator = require("../util/locator.util");
