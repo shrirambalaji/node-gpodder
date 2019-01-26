@@ -10,7 +10,6 @@ const SRCDIR = path.join(HOMEDIR, "src");
 const Locator = require("../util/locator.util");
 const apiConfiguration = require("../../config/api.config");
 const CONSTANTS = apiConfiguration.constants;
-const { Podcast, Tag } = require("../models");
 
 class PublicApi {
 	constructor() {
@@ -23,25 +22,6 @@ class PublicApi {
 	 * @param {array} input - JSON array from gpodder.net web service
 	 * @param {model} model - output model to convert the array into
 	 */
-	_toDataModel(input, model) {
-		let output = {};
-		input = toCamelCase(input);
-		return new Promise((resolve, reject) => {
-			if (Array.isArray(input) && input.length > 0) {
-				input.map((x, index) => {
-					model.getRequiredFields().map(key => {
-						if (!x.hasOwnProperty(key)) {
-							reject(new Error(`Missing required keys for ${model.getName()}`));
-						}
-					});
-					let dataModel = objectAssign(new model(), x);
-					output[index] = dataModel;
-				});
-				resolve(output);
-			}
-			resolve(input);
-		});
-	}
 
 	/**
 	 * Get a list of most-subscribed podcasts of a Tag
@@ -53,7 +33,7 @@ class PublicApi {
 		return new Promise((resolve, reject) => {
 			fetch(this._locator.toplistUri(count, response_format))
 				.then(response => httpUtil.handleApiResponse(response))
-				.then(podcastArray => resolve(this._toDataModel(podcastArray, Podcast)))
+				.then(podcastArray => resolve(toCamelCase(podcastArray)))
 				.catch(err => reject(err));
 		});
 	}
@@ -67,7 +47,7 @@ class PublicApi {
 		return new Promise((resolve, reject) => {
 			fetch(this._locator.toptagsUri(count, CONSTANTS.FORMAT_DEFAULT))
 				.then(response => httpUtil.handleApiResponse(response))
-				.then(tagArray => resolve(this._toDataModel(tagArray, Tag)))
+				.then(tagArray => resolve(toCamelCase(tagArray)))
 				.catch(err => reject(err));
 		});
 	}
@@ -85,7 +65,7 @@ class PublicApi {
 			} else {
 				fetch(this._locator.searchUri(query, response_format, options))
 					.then(response => httpUtil.handleApiResponse(response))
-					.then(podcastArray => resolve(this._toDataModel(podcastArray, Podcast)))
+					.then(podcastArray => resolve(toCamelCase(podcastArray)))
 					.catch(err => reject(err));
 			}
 		});
@@ -103,7 +83,7 @@ class PublicApi {
 			} else {
 				fetch(this._locator.podcastsOfATagUri(tag, count))
 					.then(response => httpUtil.handleApiResponse(response))
-					.then(podcastArray => resolve(this._toDataModel(podcastArray, Podcast)))
+					.then(podcastArray => resolve(toCamelCase(podcastArray)))
 					.catch(err => reject(err));
 			}
 		});
@@ -121,7 +101,7 @@ class PublicApi {
 			} else {
 				fetch(this._locator.podcastDataUri(podcastUri))
 					.then(response => httpUtil.handleApiResponse(response))
-					.then(podcast => resolve(this._toDataModel(podcast, Podcast)))
+					.then(podcast => resolve(toCamelCase(podcast)))
 					.catch(err => reject(err));
 			}
 		});
@@ -134,7 +114,7 @@ class PublicApi {
 			} else {
 				fetch(this._locator.episodeDataUri(podcastUri, episodeUri))
 					.then(response => httpUtil.handleApiResponse(response))
-					.then(podcast => resolve(this._toDataModel(podcast, Podcast)))
+					.then(podcast => resolve(toCamelCase(podcast)))
 					.catch(err => reject(err));
 			}
 		});

@@ -1,22 +1,7 @@
 const test = require("ava");
 
 const { Public: PublicApi } = require("../../../src/api");
-const { Podcast } = require("../../../src/models/");
 const mockTopList = require("../../fixtures/toplist.json");
-
-test("_toDataModel converts input data into specified data model", async t => {
-	try {
-		const podcasts = await PublicApi._toDataModel(mockTopList.toplist, Podcast);
-		t.truthy(podcasts[0].url);
-		t.truthy(podcasts[0].title);
-		t.truthy(podcasts[0].description);
-		t.truthy(podcasts[0].subscribers);
-		t.truthy(podcasts[0].subscribersLastWeek);
-		t.truthy(podcasts[0].logoUrl);
-		t.truthy(podcasts[0].website);
-		t.truthy(podcasts[0].mygpoLink);
-	} catch (err) {}
-});
 
 test("toplist returns an array of podcasts", async t => {
 	try {
