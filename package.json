@@ -32,7 +32,6 @@
     "camelcase-keys": "^4.2.0",
     "cross-fetch": "^3.0.0",
     "json_": "^2.0.0",
-    "object-assign": "^4.1.1",
-    "util-box": "^1.0.12"
+    "object-assign": "^4.1.1"
   }
 }

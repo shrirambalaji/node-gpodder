@@ -2,7 +2,7 @@
 const fetch = require("cross-fetch");
 const Promise = require("bluebird");
 const toCamelCase = require("camelcase-keys");
-const { httpUtil } = require("util-box");
+const { handleApiResponse } = require("../util/http.util");
 const Locator = require("../util/locator.util");
 const apiConfiguration = require("../../config/api.config");
 const CONSTANTS = apiConfiguration.constants;
@@ -28,7 +28,7 @@ class PublicApi {
 		const response_format = format || CONSTANTS.FORMAT_DEFAULT;
 		return new Promise((resolve, reject) => {
 			fetch(this._locator.toplistUri(count, response_format))
-				.then(response => httpUtil.handleApiResponse(response))
+				.then(response => handleApiResponse(response))
 				.then(podcastArray => resolve(toCamelCase(podcastArray)))
 				.catch(err => reject(err));
 		});
@@ -42,7 +42,7 @@ class PublicApi {
 	getTopTags(count = CONSTANTS.TOPLIST_DEFAULT) {
 		return new Promise((resolve, reject) => {
 			fetch(this._locator.toptagsUri(count, CONSTANTS.FORMAT_DEFAULT))
-				.then(response => httpUtil.handleApiResponse(response))
+				.then(response => handleApiResponse(response))
 				.then(tagArray => resolve(toCamelCase(tagArray)))
 				.catch(err => reject(err));
 		});
@@ -60,7 +60,7 @@ class PublicApi {
 				reject(new Error("Missing or invalid parameters: query"));
 			} else {
 				fetch(this._locator.searchUri(query, response_format, options))
-					.then(response => httpUtil.handleApiResponse(response))
+					.then(response => handleApiResponse(response))
 					.then(podcastArray => resolve(toCamelCase(podcastArray)))
 					.catch(err => reject(err));
 			}
@@ -78,7 +78,7 @@ class PublicApi {
 				reject(new Error("Missing or invalid parameters: tag"));
 			} else {
 				fetch(this._locator.podcastsOfATagUri(tag, count))
-					.then(response => httpUtil.handleApiResponse(response))
+					.then(response => handleApiResponse(response))
 					.then(podcastArray => resolve(toCamelCase(podcastArray)))
 					.catch(err => reject(err));
 			}
@@ -96,7 +96,7 @@ class PublicApi {
 				reject(new Error("Missing or invalid parameters: podcastUri"));
 			} else {
 				fetch(this._locator.podcastDataUri(podcastUri))
-					.then(response => httpUtil.handleApiResponse(response))
+					.then(response => handleApiResponse(response))
 					.then(podcast => resolve(toCamelCase(podcast)))
 					.catch(err => reject(err));
 			}
@@ -109,7 +109,7 @@ class PublicApi {
 				reject(new Error("Missing or invalid parameters: podcastUri, episodeUri"));
 			} else {
 				fetch(this._locator.episodeDataUri(podcastUri, episodeUri))
-					.then(response => httpUtil.handleApiResponse(response))
+					.then(response => handleApiResponse(response))
 					.then(podcast => resolve(toCamelCase(podcast)))
 					.catch(err => reject(err));
 			}

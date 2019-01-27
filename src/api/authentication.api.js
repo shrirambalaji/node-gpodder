@@ -1,7 +1,7 @@
 "use strict";
 
 const fetch = require("cross-fetch");
-const { httpUtil } = require("util-box");
+const { handleApiResponse } = require("../util/http.util");
 const Promise = require("bluebird");
 const Locator = require("../util/locator.util");
 const meta = {
@@ -30,7 +30,7 @@ module.exports = {
 					const uri = locator.postLogin();
 					let params = client._authorizeRequest({ method: "POST", credentials: "same-origin" });
 					fetch(uri, params)
-						.then(response => httpUtil.handleApiResponse(response))
+						.then(response => handleApiResponse(response))
 						.then(json => {
 							resolve(json);
 						})
@@ -62,7 +62,7 @@ module.exports = {
 					const uri = locator.postLogout();
 					let params = client._authorizeRequest({ method: "POST", credentials: "same-origin" });
 					fetch(uri, params)
-						.then(response => httpUtil.handleApiResponse(response))
+						.then(response => handleApiResponse(response))
 						.then(json => {
 							resolve(json);
 						})

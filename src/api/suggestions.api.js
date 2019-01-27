@@ -1,6 +1,6 @@
 "use strict";
 const fetch = require("cross-fetch");
-const { httpUtil } = require("util-box");
+const { handleApiResponse } = require("../util/http.util");
 const Promise = require("bluebird");
 const Locator = require("../util/locator.util");
 const apiConfiguration = require("../../config/api.config");
@@ -13,7 +13,7 @@ class SuggestionsApi {
 			const uri = locator.suggestionsUri(count, format);
 			let params = client._authorizeRequest({ method: "GET" });
 			fetch(uri, params)
-				.then(response => httpUtil.handleApiResponse(response))
+				.then(response => handleApiResponse(response))
 				.then(json => {
 					resolve(json);
 				})

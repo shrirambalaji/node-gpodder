@@ -1,4 +1,4 @@
-const { httpUtil } = require("util-box");
+const { handleApiResponse, makeQueryString } = require("../util/http.util");
 const apiConfiguration = require("../../config/api.config.js");
 const DEFAULT_FORMAT = "opml";
 const SIMPLE_FORMATS = ["opml", "json", "txt"];
@@ -139,7 +139,7 @@ class Locator {
 		searchParams.q = options.q || query;
 		if (options.isJsonP) searchParams["jsonp"] = options.isJsonP;
 		if (options.shouldScaleLogo) searchParams["scale_logo"] = options.shouldScaleLogo;
-		return `${this._getBaseUri("search")}.${this._normalizeFormat(format)}${httpUtil.makeQueryString(searchParams)}`;
+		return `${this._getBaseUri("search")}.${this._normalizeFormat(format)}${makeQueryString(searchParams)}`;
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Locator {
 	 */
 	subscriptionUpdatesUri(deviceId, since = null) {
 		since = this._normalizeSince(since);
-		return `${this._getBaseUri("subscriptions", true)}/${this._username}/${deviceId}.json${httpUtil.makeQueryString({
+		return `${this._getBaseUri("subscriptions", true)}/${this._username}/${deviceId}.json${makeQueryString({
 			since: since
 		})}`;
 	}
@@ -186,7 +186,7 @@ class Locator {
 				podcast: podcast,
 				device: deviceId
 			};
-			return `${this._getBaseUri("episodes", true)}/${this._username}.json${httpUtil.makeQueryString(opts)}`;
+			return `${this._getBaseUri("episodes", true)}/${this._username}.json${makeQueryString(opts)}`;
 		}
 	}
 
@@ -199,7 +199,7 @@ class Locator {
 	deviceUpdatesUri(deviceId, since, includeActions = false) {
 		since = this._normalizeSince(since);
 		const opts = { since, includeActions };
-		return `${this._getBaseUri("updates", true)}/${this._username}/${deviceId}.json${httpUtil.makeQueryString(opts)}`;
+		return `${this._getBaseUri("updates", true)}/${this._username}/${deviceId}.json${makeQueryString(opts)}`;
 	}
 
 	/**
@@ -242,7 +242,7 @@ class Locator {
 		let opts = {
 			url: podcast
 		};
-		return `${this._getBaseUri("data", true)}/podcast.json${httpUtil.makeQueryString(opts)}`;
+		return `${this._getBaseUri("data", true)}/podcast.json${makeQueryString(opts)}`;
 	}
 
 	/**
@@ -255,7 +255,7 @@ class Locator {
 			podcast: podcast,
 			url: episode
 		};
-		return `${this._getBaseUri("data", true)}/episode.json${httpUtil.makeQueryString(opts)}`;
+		return `${this._getBaseUri("data", true)}/episode.json${makeQueryString(opts)}`;
 	}
 
 	/**
@@ -283,7 +283,7 @@ class Locator {
 					let deviceName = params[0];
 					if (!deviceName) return new Error("Device Name is not specified");
 					else
-						return `${settingsUri}${httpUtil.makeQueryString({
+						return `${settingsUri}${makeQueryString({
 							device: deviceName
 						})}`;
 					break;
@@ -292,7 +292,7 @@ class Locator {
 					let podcastUrl = params[0];
 					if (!podcastUrl) return new Error("Podcast Url is not specified");
 					else
-						return `${settingsUri}${httpUtil.makeQueryString({
+						return `${settingsUri}${makeQueryString({
 							podcast: podcastUrl
 						})}`;
 					break;
@@ -302,7 +302,7 @@ class Locator {
 					let episode = params[1];
 					if (!podcast || !episode) return new Error("Podcast or Episode Url is not specified");
 					else
-						return `${settingsUri}${httpUtil.makeQueryString({
+						return `${settingsUri}${makeQueryString({
 							podcast: podcast,
 							episode: episode
 						})}`;

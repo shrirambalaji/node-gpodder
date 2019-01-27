@@ -1,7 +1,7 @@
 "use strict";
 
 const fetch = require("cross-fetch");
-const { httpUtil } = require("util-box");
+const { handleApiResponse } = require("../util/http.util");
 const Promise = require("bluebird");
 const Locator = require("../util/locator.util");
 const meta = { name: "FavoritesApi" };
@@ -26,7 +26,7 @@ class FavoritesApi {
 						credentials: "same-origin"
 					});
 					fetch(uri, params)
-						.then(response => httpUtil.handleApiResponse(response))
+						.then(response => handleApiResponse(response))
 						.then(json => {
 							resolve(json);
 						})

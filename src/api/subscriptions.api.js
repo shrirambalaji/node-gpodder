@@ -1,9 +1,7 @@
 "use strict";
 const fetch = require("cross-fetch");
-const { outputUtil } = require("util-box");
-const { httpUtil } = require("util-box");
+const { handleApiResponse } = require("../util/http.util");
 const Promise = require("bluebird");
-const { debug } = outputUtil;
 const Locator = require("../util/locator.util");
 const SIMPLE_FORMATS = ["opml", "json", "txt"];
 class SubscriptionsApi {
@@ -26,9 +24,9 @@ class SubscriptionsApi {
 					// initialize locator with username and host
 					let params = client._authorizeRequest({ method: "GET" });
 					const uri = locator.subscriptionsUri(deviceId, format);
-					debug("Request: ", uri, " with options: ", JSON.stringify(params));
+					// console.debug("Request: ", uri, " with options: ", JSON.stringify(params));
 					fetch(uri, params)
-						.then(response => httpUtil.handleApiResponse(response))
+						.then(response => handleApiResponse(response))
 						.then(json => {
 							resolve(json);
 						})
@@ -60,9 +58,9 @@ class SubscriptionsApi {
 				// initialize locator with username and host
 				let params = client._authorizeRequest({ method: "PUT", body: urls });
 				const uri = locator.subscriptionsUri(deviceId, format);
-				debug("Request: ", uri, "with options: ", params);
+				// console.debug("Request: ", uri, "with options: ", params);
 				fetch(uri, params)
-					.then(response => httpUtil.handleApiResponse(response))
+					.then(response => handleApiResponse(response))
 					.then(json => resolve(json))
 					.catch(e => reject(new Error(e)));
 			}
@@ -89,9 +87,9 @@ class SubscriptionsApi {
 				// initialize locator with username and host
 				let params = client._authorizeRequest({ method: "GET" });
 				const uri = locator.subscriptionsUri(format);
-				debug("Request: ", uri, "with options: ", params);
+				// console.debug("Request: ", uri, "with options: ", params);
 				fetch(uri, params)
-					.then(response => httpUtil.handleApiResponse(response))
+					.then(response => handleApiResponse(response))
 					.then(json => {
 						resolve(json);
 					})
@@ -119,9 +117,9 @@ class SubscriptionsApi {
 				// initialize locator with username and host
 				let params = client._authorizeRequest({ method: "GET" });
 				const uri = locator.subscriptionUpdatesUri(deviceId, since);
-				debug("Request: ", uri, "with options: ", params);
+				// console.debug("Request: ", uri, "with options: ", params);
 				fetch(uri, params)
-					.then(response => httpUtil.handleApiResponse(response))
+					.then(response => handleApiResponse(response))
 					.then(json => {
 						resolve(json);
 					})
@@ -148,9 +146,9 @@ class SubscriptionsApi {
 					const locator = new Locator(client.username);
 					let params = client._authorizeRequest({ method: "POST", body: body });
 					const uri = locator.addRemoveSubscriptionsUri(deviceId);
-					debug("Request: ", uri, "with options: ", params);
+					// console.debug("Request: ", uri, "with options: ", params);
 					fetch(uri, params)
-						.then(response => httpUtil.handleApiResponse(response))
+						.then(response => handleApiResponse(response))
 						.then(json => resolve(json))
 						.catch(e => {
 							reject(e);
