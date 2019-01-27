@@ -1,6 +1,5 @@
 "use strict";
 
-const outputUtil = require("util-box").outputUtil;
 const Promise = require("bluebird");
 
 const PublicApi = require("./public.api").PublicApi;

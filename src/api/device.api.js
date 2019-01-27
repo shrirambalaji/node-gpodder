@@ -1,7 +1,7 @@
 "use strict";
 
 const fetch = require("cross-fetch");
-const httpUtil = require("util-box").httpUtil;
+const { httpUtil } = require("util-box");
 const Promise = require("bluebird");
 const Locator = require("../util/locator.util");
 const meta = { name: "DeviceApi" };

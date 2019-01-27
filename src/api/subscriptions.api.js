@@ -1,7 +1,7 @@
 "use strict";
 const fetch = require("cross-fetch");
-const outputUtil = require("util-box").outputUtil;
-const httpUtil = require("util-box").httpUtil;
+const { outputUtil } = require("util-box");
+const { httpUtil } = require("util-box");
 const Promise = require("bluebird");
 const { debug } = outputUtil;
 const Locator = require("../util/locator.util");
