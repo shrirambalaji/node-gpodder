@@ -1,10 +1,9 @@
 "use strict";
-const path = require("path");
 const fetch = require("cross-fetch");
 const outputUtil = require("util-box").outputUtil;
 const httpUtil = require("util-box").httpUtil;
 const Promise = require("bluebird");
-const { error, success, debug } = outputUtil;
+const { debug } = outputUtil;
 const Locator = require("../util/locator.util");
 const SIMPLE_FORMATS = ["opml", "json", "txt"];
 class SubscriptionsApi {
