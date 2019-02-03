@@ -1,6 +1,5 @@
 "use strict";
 
-const Promise = require("bluebird");
 
 const PublicApi = require("./public.api").PublicApi;
 // uses the same methods of public api

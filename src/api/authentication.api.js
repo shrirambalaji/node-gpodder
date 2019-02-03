@@ -2,7 +2,6 @@
 
 const fetch = require("cross-fetch");
 const { handleApiResponse } = require("../util/http.util");
-const Promise = require("bluebird");
 const Locator = require("../util/locator.util");
 const meta = {
 	name: "Authentication API"

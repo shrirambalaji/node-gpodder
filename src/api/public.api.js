@@ -1,6 +1,5 @@
 "use strict";
 const fetch = require("cross-fetch");
-const Promise = require("bluebird");
 const toCamelCase = require("camelcase-keys");
 const { handleApiResponse } = require("../util/http.util");
 const Locator = require("../util/locator.util");
